@@ -5,7 +5,6 @@ export const URL_PATH = {
 	QUIZ_EDIT: '/quiz/edit/:id',
 	QUIZ_FILTER: '/quiz/filter',
 	CATEGORY: '/category',
-	CATEGORY_DETAIL: '/category/:id',
 	LOGIN: '/login',
 	MY_PAGE: '/my-page',
 };
@@ -13,7 +12,6 @@ export const URL_PATH = {
 export const NAVBAR_PAGE = [
 	URL_PATH.QUIZ_FILTER,
 	URL_PATH.CATEGORY,
-	URL_PATH.CATEGORY_DETAIL,
 	URL_PATH.MY_PAGE,
 ];
 

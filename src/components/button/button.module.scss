@@ -6,7 +6,7 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	height: var(--button-height);
+	height: #{$button-height};
 	padding: 0 10px;
 	border: 1px solid #{$gray-80};
 	border-radius: 8px;
