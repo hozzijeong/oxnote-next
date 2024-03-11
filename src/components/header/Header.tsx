@@ -1,10 +1,12 @@
-import { URL_PATH } from '@constants/path';
-import { generatePath, useNavigate } from 'react-router-dom';
-import Back from '@assets/back.svg';
-import Menu from '@assets/menu_vertical.svg';
+'use client';
+
+import { URL_PATH } from '@/constants/path';
+import { Back, MenuVertical } from '@/assets';
+import { useCallback, useMemo } from 'react';
+import useToggle from '@/hooks/useToggle';
+import Image from 'next/image';
 import styles from './header.module.scss';
-import { useMemo } from 'react';
-import useToggle from '@hooks/useToggle';
+import { useRouter } from 'next/navigation';
 
 const isKeyofURLPath = (backUrl: any): backUrl is keyof typeof URL_PATH => {
 	return backUrl in URL_PATH;
@@ -18,38 +20,38 @@ interface HeaderProps {
 }
 
 const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
-	const navigate = useNavigate();
+	const router = useRouter();
 
-	const backClickHandler = () => {
+	const backClickHandler = useCallback(() => {
 		let historyBackUrl: string | number = -1;
 
 		if (isKeyofURLPath(backUrl)) {
 			historyBackUrl = pathId
-				? generatePath(URL_PATH[backUrl], { id: pathId })
+				? `${URL_PATH[backUrl]}/${pathId}`
 				: URL_PATH[backUrl];
 		}
 
 		if (typeof historyBackUrl === 'number') {
-			navigate(-1);
+			router.back();
 		} else {
-			navigate(historyBackUrl);
+			router.push(historyBackUrl);
 		}
-	};
+	}, [backUrl, pathId, router]);
 
 	const backUrlButton = useMemo(() => {
 		return (
 			backUrl && (
 				<button className={styles['back-arrow']} onClick={backClickHandler}>
-					<img src={Back} width={20} height={20} alt='뒤로 가기' />
+					<Image src={Back} width={20} height={20} alt='뒤로 가기' />
 				</button>
 			)
 		);
-	}, []);
+	}, [backClickHandler, backUrl]);
 
 	const { isOn: menuOn, toggleHandler: menuHandler } = useToggle(false);
 
 	return (
-		<header className={styles.wrapper}>
+		<header className={styles.container}>
 			{backUrlButton}
 			{title}
 			{menuComponent && (
@@ -59,7 +61,7 @@ const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
 					onClick={menuHandler}
 					aria-label='메뉴'
 				>
-					<img src={Menu} width={20} height={20} alt='메뉴 클릭' />
+					<Image src={MenuVertical} width={20} height={20} alt='메뉴 클릭' />
 				</button>
 			)}
 			{menuOn && menuComponent}
