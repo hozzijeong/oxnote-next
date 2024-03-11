@@ -1,5 +1,5 @@
-@use '@/style/mixin' as mix;
-
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
 .wrapper {
 	display: flex;
 	flex-direction: column;
@@ -7,5 +7,5 @@
 }
 
 .title {
-	@include mix.fontMedium;
+	@include fontMedium;
 }

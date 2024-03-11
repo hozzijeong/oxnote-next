@@ -1,6 +1,6 @@
-import StarFill from '@assets/star_fill.svg';
-import StarEmpty from '@assets/star_empty.svg';
+import { StarFill, StarEmpty } from '@/assets';
 import { ButtonHTMLAttributes } from 'react';
+import Image from 'next/image';
 
 interface FavoriteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	isFavorite: boolean;
@@ -8,9 +8,10 @@ interface FavoriteButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const FavoriteButton = (props: FavoriteButtonProps) => {
 	const { isFavorite, onClick } = props;
+
 	return (
 		<button type='button' onClick={onClick}>
-			<img
+			<Image
 				src={isFavorite ? StarFill : StarEmpty}
 				width={24}
 				height={24}

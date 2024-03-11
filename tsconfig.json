@@ -17,13 +17,24 @@
 				"name": "next"
 			},
 			{
-				"name": "typescript-plugin-css-modules"
+				"name": "typescript-plugin-css-modules",
+				"options": {
+					"classnameTransform": "camelCase",
+					"customMatcher": "\\.module\\.scss$"
+				}
 			}
 		],
 		"paths": {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"**/*.module.scss",
+		"**/*.scss"
+	],
 	"exclude": ["node_modules"]
 }

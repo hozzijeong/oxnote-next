@@ -7,7 +7,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	mode?: Mode;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(function (
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 	{ mode, ...props },
 	ref
 ) {

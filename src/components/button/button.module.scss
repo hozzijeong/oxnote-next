@@ -1,5 +1,5 @@
-@use '@/style/mixin' as mix;
-@use '@/style/variables' as v;
+@import '@/styles/mixins.module.scss';
+@import '@/styles/variables.module.scss';
 
 .base {
 	display: flex;
@@ -8,12 +8,12 @@
 	width: 100%;
 	height: var(--button-height);
 	padding: 0 10px;
-	border: 1px solid #{v.$gray-80};
+	border: 1px solid #{$gray-80};
 	border-radius: 8px;
 	background: white;
 	box-shadow: 0 0 1px rgb(67 90 111 / 3%), 0 2px 2px -2px rgb(67 90 111 / 20%);
-	color: #{v.$gray-100};
-	@include mix.fontMedium;
+	color: #{$gray-100};
+	@include fontMedium;
 
 	&:hover {
 		opacity: 0.9;
@@ -32,11 +32,11 @@
 }
 
 .default {
-	background-color: #{v.$gray-70};
-	color: #{v.$gray-100};
+	background-color: #{$gray-70};
+	color: #{$gray-100};
 }
 
 .primary {
-	background-color: #{v.$correct};
-	color: #{v.$white-100};
+	background-color: #{$correct};
+	color: #{$white-100};
 }
