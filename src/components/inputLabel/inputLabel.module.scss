@@ -1,0 +1,11 @@
+@use './../../../style/mixin' as mix;
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.title {
+	@include mix.fontMedium;
+}

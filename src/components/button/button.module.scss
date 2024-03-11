@@ -1,0 +1,42 @@
+@use './../../../style/mixin' as mix;
+@use './../../../style/variables' as v;
+
+.base {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: var(--button-height);
+	padding: 0 10px;
+	border: 1px solid #{v.$gray-80};
+	border-radius: 8px;
+	background: white;
+	box-shadow: 0 0 1px rgb(67 90 111 / 3%), 0 2px 2px -2px rgb(67 90 111 / 20%);
+	color: #{v.$gray-100};
+	@include mix.fontMedium;
+
+	&:hover {
+		opacity: 0.9;
+		cursor: pointer;
+	}
+}
+
+.large {
+	width: 100%;
+	height: 48px;
+}
+
+.small {
+	width: 150px;
+	height: 32px;
+}
+
+.default {
+	background-color: #{v.$gray-70};
+	color: #{v.$gray-100};
+}
+
+.primary {
+	background-color: #{v.$correct};
+	color: #{v.$white-100};
+}
