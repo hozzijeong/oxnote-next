@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Folder } from '@/assets';
 import { URL_PATH } from '@/constants/path';
+import { getRandomColor } from '@/utils/colors';
 
 const CATEGORIES: Category[] = [
 	{ id: 1, name: '첫 번째' },
@@ -29,6 +30,7 @@ const Category = () => {
 						CATEGORIES.map(({ id, name }) => (
 							<Link
 								key={id}
+								style={{ backgroundColor: getRandomColor() }}
 								className={styles['category-folder']}
 								href={{
 									pathname: `${URL_PATH.CATEGORY}/${id}`,
@@ -36,8 +38,8 @@ const Category = () => {
 							>
 								<Image
 									src={Folder}
-									width={72}
-									height={72}
+									width={60}
+									height={60}
 									alt={`${name} 폴더`}
 								/>
 								{name}
