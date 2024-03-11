@@ -2,7 +2,7 @@
 
 .selector-button {
 	justify-content: space-between;
-	background-color: #{$white-100};
+	background-color: #{$white};
 
 	&:focus {
 		border: 1px solid #{$correct};
