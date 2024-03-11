@@ -8,7 +8,6 @@ const nextConfig = {
 	reactStrictMode: true,
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'styles')],
-		prependData: `@import "src/styles/variables.scss"; @import "src/styles/mixins.scss";`,
 	},
 };
 

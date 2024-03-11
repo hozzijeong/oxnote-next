@@ -1,6 +1,6 @@
 /* stylelint-disable keyframes-name-pattern */
 /* stylelint-disable scss/no-global-function-names */
-@use '../../../style/variables' as v;
+@use '@/style/variables' as v;
 
 $borderColors: (
 	info: #{v.$sky},

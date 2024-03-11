@@ -1,6 +1,6 @@
 /* stylelint-disable keyframes-name-pattern */
-@use '../../../style/variables' as v;
-@use '../../../style/mixin' as m;
+@use '@/style/variables' as v;
+@use '@/style/mixin' as m;
 
 @keyframes alert {
 	0% {

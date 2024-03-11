@@ -1,0 +1,10 @@
+@import '@/styles/variables.module.scss';
+
+.main {
+	position: relative;
+	width: 100%;
+	min-width: #{$min-device-width};
+	max-width: #{$max-device-width};
+	height: 100%;
+	margin: 0 auto;
+}
