@@ -1,5 +1,3 @@
-import styles from './page.module.scss';
-
 export default function Home() {
-	return <main className={styles.main}>Hello. NextJS</main>;
+	return <main>Hello. NextJS</main>;
 }

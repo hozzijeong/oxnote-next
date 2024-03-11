@@ -1,0 +1,23 @@
+@import '@/styles/mixins.module.scss';
+@import '@/styles/variables.module.scss';
+
+.add-category-container {
+	display: flex;
+	max-width: #{$max-device-width};
+	height: #{$button-height};
+	@include fontMedium;
+
+	gap: 8px;
+}
+
+.add-input {
+	width: 75%;
+}
+
+.add-button {
+	width: 35%;
+	padding: 8px;
+	border-radius: 8px;
+	background-color: #{$correct};
+	color: #{$white};
+}

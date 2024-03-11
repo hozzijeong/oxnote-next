@@ -1,0 +1,25 @@
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
+
+.container {
+	display: flex;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	height: 60px;
+	border-bottom: 1px solid #{$gray-80};
+	background-color: #{$white};
+	color: #{$gray-100};
+
+	@include fontLarge;
+}
+
+.back-arrow {
+	position: absolute;
+	left: 20px;
+}
+
+.menu {
+	position: absolute;
+	right: 20px;
+}

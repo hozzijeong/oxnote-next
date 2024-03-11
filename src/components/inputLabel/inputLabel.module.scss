@@ -1,0 +1,11 @@
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.title {
+	@include fontMedium;
+}
