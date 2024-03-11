@@ -1,0 +1,13 @@
+export { default as Back } from './back.svg';
+export { default as CloseCircle } from './close_circle.svg';
+export { default as Folder } from './folder.svg';
+export { default as LeftArrow } from './left_arrow.svg';
+export { default as MenuVertical } from './menu_vertical.svg';
+export { default as Plus } from './plus.svg';
+export { default as Profile } from './profile.svg';
+export { default as Quiz } from './quiz.svg';
+export { default as React } from './react.svg';
+export { default as RightArrow } from './right_arrow.svg';
+export { default as RoundPlus } from './round_plus.svg';
+export { default as StarEmpty } from './star_empty.svg';
+export { default as StarFill } from './star_fill.svg';

@@ -1,5 +1,4 @@
 /* stylelint-disable no-duplicate-selectors */
-// prettier-ignore
 
 /* http://meyerweb.com/eric/tools/css/reset/
     v5.0.1 | 20191019
@@ -174,4 +173,29 @@ input::-moz-focus-inner {
 	margin: 0;
 	padding: 0;
 	border: 0;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+}
+
+* {
+	font-family: 'Pretendard Variable', Pretendard, -apple-system,
+		BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+		'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+		'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+
+/********** hidden scroll **********/
+html,
+body {
+	scrollbar-width: none;
+	width: 100%;
+	font-size: 62.5%;
+}
+
+body::-webkit-scrollbar {
+	display: none;
 }

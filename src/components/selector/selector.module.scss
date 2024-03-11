@@ -1,0 +1,52 @@
+@import '@/styles/variables.module.scss';
+
+.selector-button {
+	justify-content: space-between;
+	background-color: #{$white};
+
+	&:focus {
+		border: 1px solid #{$correct};
+		outline: none;
+	}
+}
+
+.options {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	button {
+		&:focus {
+			border: 1px solid #{$correct};
+			outline: none;
+		}
+	}
+}
+
+.wrapper {
+	position: relative;
+}
+
+.menu-container {
+	display: flex;
+	position: absolute;
+	z-index: 1080;
+	top: 32px;
+}
+
+.input-container {
+	padding: 8px;
+	border-bottom: 1px solid #{$gray-70};
+}
+
+.search-guide {
+	padding: 12px;
+	color: #{$gray-100};
+	font-size: 13px;
+	text-align: left;
+}
+
+.placeholder {
+	color: #{$gray-80};
+	line-height: inherit !important;
+}

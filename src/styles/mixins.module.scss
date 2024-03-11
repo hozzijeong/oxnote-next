@@ -1,41 +1,41 @@
-@use './variables' as v;
+@import './variables.module.scss';
 
 @mixin small {
-	@media (max-width: #{v.$min-device-width}) {
+	@media (max-width: #{$min-device-width}) {
 		@content;
 	}
 }
 
 @mixin min {
-	@media (min-width: #{v.$min-device-width}) and (max-width: #{v.$mid-device-width - 1px}) {
+	@media (min-width: #{$min-device-width}) and (max-width: #{$mid-device-width - 1px}) {
 		@content;
 	}
 }
 
 @mixin mid {
-	@media (min-width: #{v.$mid-device-width}) and (max-width: #{v.$max-device-width - 1px}) {
+	@media (min-width: #{$mid-device-width}) and (max-width: #{$max-device-width - 1px}) {
 		@content;
 	}
 }
 
 @mixin max {
-	@media (min-width: #{v.$max-device-width}) {
+	@media (min-width: #{$max-device-width}) {
 		@content;
 	}
 }
 
 @mixin fontSmall {
-	font-size: v.$font-small;
+	font-size: $font-small;
 	line-height: 1.8rem;
 }
 
 @mixin fontMedium {
-	font-size: v.$font-medium;
+	font-size: $font-medium;
 	line-height: 2rem;
 }
 
 @mixin fontLarge {
-	font-size: v.$font-large;
+	font-size: $font-large;
 	line-height: 2.4rem;
 }
 
@@ -50,7 +50,7 @@
 
 @mixin modalBox {
 	position: fixed;
-	z-index: #{v.$modal};
+	z-index: #{$modal};
 	top: auto;
 	bottom: 0;
 
@@ -58,7 +58,7 @@
 	margin: 0 auto;
 	padding: 16px 0;
 
-	background-color: #{v.$white-100};
+	background-color: #{$white};
 	border: none;
 	border-radius: 8px;
 
@@ -68,7 +68,7 @@
 		cursor: pointer;
 
 		position: fixed;
-		z-index: #{v.$modal-backdrop};
+		z-index: #{$modal-backdrop};
 		top: 0;
 		left: 0;
 
@@ -97,6 +97,6 @@
 	align-items: center;
 	justify-content: center;
 	width: calc(100% - 50px);
-	min-width: calc(#{v.$min-device-width} - 50px);
-	max-width: calc(#{v.$mid-device-width} - 50px);
+	min-width: calc(#{$min-device-width} - 50px);
+	max-width: calc(#{$mid-device-width} - 50px);
 }

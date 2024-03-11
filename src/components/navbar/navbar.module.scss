@@ -1,0 +1,29 @@
+@import '@/styles/variables.module.scss';
+
+.wrapper {
+	display: flex;
+	position: fixed;
+	z-index: #{$sticky};
+	bottom: 0;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+	min-width: #{$min-device-width};
+	max-width: #{$max-device-width};
+	height: 60px;
+	border-top: 1px solid #{$gray-80};
+	background-color: #{$white};
+}
+
+.link {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	align-items: center;
+	color: #{$gray-100};
+}
+
+.nav-icon {
+	width: 24px;
+	height: 24px;
+}
