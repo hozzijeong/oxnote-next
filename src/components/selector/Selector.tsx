@@ -10,7 +10,7 @@ import React, {
 import styles from './selector.module.scss';
 import { Button, Input, Menu } from '../index';
 
-type Props = {
+export type SelectorProps = {
 	type: 'single' | 'multi';
 	list: string[];
 	placeholder: string;
@@ -26,7 +26,7 @@ const Selector = ({
 	selected,
 	onSubmit,
 	searchOption = false,
-}: Props) => {
+}: SelectorProps) => {
 	const [selectedOption, setSelectedOption] = useState<typeof list>([]);
 	const [menuOpen, setMenuOpen] = useState(false);
 
