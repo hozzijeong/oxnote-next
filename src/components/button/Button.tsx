@@ -10,13 +10,14 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 	className?: string;
 };
 
-const Button = forwardRef<HTMLButtonElement, Props>(
-	({ size = 'large', color = 'default', className, ...props }, ref) => {
-		const buttonClassName = `${styles['base']} ${styles[size]} ${
-			styles[color]
-		} ${className ? `${className}` : ''}`;
-		return <button ref={ref} {...props} className={buttonClassName} />;
-	}
-);
+const Button = forwardRef<HTMLButtonElement, Props>(function Button(
+	{ size = 'large', color = 'default', className, ...props },
+	ref
+) {
+	const buttonClassName = `${styles['base']} ${styles[size]} ${styles[color]} ${
+		className ? `${className}` : ''
+	}`;
+	return <button ref={ref} {...props} className={buttonClassName} />;
+});
 
 export default Button;

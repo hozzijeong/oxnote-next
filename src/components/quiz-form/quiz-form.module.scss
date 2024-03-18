@@ -1,0 +1,20 @@
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
+
+.quiz-form {
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+}
+
+.category {
+	height: #{$button-height};
+	@include fontMedium;
+}
+
+.button-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+}

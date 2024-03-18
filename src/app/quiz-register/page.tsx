@@ -1,6 +1,6 @@
-import { Input, Selector } from '@/components';
-import styles from './quizRegister.module.scss';
-import QuizForm from '@/components/quiz-form';
+'use client';
+import { Input, QuizForm } from '@/components';
+import styles from './quiz-register.module.scss';
 
 // const CATEGORIES: Category[] = [
 // 	{ id: 1, name: '첫 번째' },
@@ -20,6 +20,8 @@ import QuizForm from '@/components/quiz-form';
 // 	[YES]: 'O',
 // 	[NO]: 'X',
 // };
+
+// Error: https://github.com/vercel/next.js/issues/41940
 
 const QuizRegister = () => {
 	return (

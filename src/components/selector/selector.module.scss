@@ -1,15 +1,5 @@
 @import '@/styles/variables.module.scss';
 
-.selector-button {
-	justify-content: space-between;
-	background-color: #{$white};
-
-	&:focus {
-		border: 1px solid #{$correct};
-		outline: none;
-	}
-}
-
 .options {
 	display: flex;
 	align-items: center;
@@ -37,13 +27,6 @@
 .input-container {
 	padding: 8px;
 	border-bottom: 1px solid #{$gray-70};
-}
-
-.search-guide {
-	padding: 12px;
-	color: #{$gray-100};
-	font-size: 13px;
-	text-align: left;
 }
 
 .placeholder {

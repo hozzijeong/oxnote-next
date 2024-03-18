@@ -1,16 +1,6 @@
-@import '@/styles/ns.module.scss';
+@import '../root.module.scss';
 @import '@/styles/variables.module.scss';
-
-.quiz-form {
-	display: flex;
-	flex-direction: column;
-	gap: 48px;
-}
-
-.category {
-	height: #{$button-height};
-	@include fontMedium;
-}
+@import '@/styles/mixins.module.scss';
 
 .explain {
 	height: 240px;
@@ -31,11 +21,4 @@
 		color: #{$gray-80};
 		line-height: inherit !important;
 	}
-}
-
-.button-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 16px;
 }

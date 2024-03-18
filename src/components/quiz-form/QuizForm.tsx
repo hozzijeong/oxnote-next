@@ -1,4 +1,6 @@
-import styles from './quizForm.module.scss';
+'use client';
+
+import styles from './quiz-form.module.scss';
 import { PropsWithChildren } from 'react';
 import { InputLabel, Button } from '@/components';
 
@@ -8,7 +10,7 @@ const QuizForm = ({ children }: PropsWithChildren) => {
 
 type SubmitButtonProps = {
 	title: string;
-	cancelHandler: React.MouseEventHandler<HTMLButtonElement>;
+	cancelHandler: () => void;
 };
 
 const SubmitButtons = (props: SubmitButtonProps) => {
