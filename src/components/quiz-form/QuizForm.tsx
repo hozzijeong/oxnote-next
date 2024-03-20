@@ -4,7 +4,9 @@ import styles from './quiz-form.module.scss';
 import { PropsWithChildren } from 'react';
 import { InputLabel, Button } from '@/components';
 
-const QuizForm = ({ children }: PropsWithChildren) => {
+const QuizForm = ({
+	children,
+}: PropsWithChildren & React.HtmlHTMLAttributes<HTMLFormElement>) => {
 	return <form className={styles['quiz-form']}>{children}</form>;
 };
 

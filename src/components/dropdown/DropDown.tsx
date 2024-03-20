@@ -4,6 +4,8 @@ import {
 	PropsWithChildren,
 	forwardRef,
 	useCallback,
+	useEffect,
+	useRef,
 } from 'react';
 import styles from './dropdown.module.scss';
 import { Button } from '..';
@@ -88,14 +90,38 @@ const Menu = forwardRef<
 	HTMLUListElement,
 	PropsWithChildren & MenuBaseProps<HTMLUListElement>
 >(function Menu({ className, children, ...props }, ref) {
-	const { open } = useDropDownToggle();
+	const { open, closeDropDown } = useDropDownToggle();
+	const menuRef = useRef<HTMLUListElement>(null);
 
 	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+				closeDropDown();
+			}
+		};
+
+		const handleKeyDownHandler = (event: KeyboardEvent) => {
+			const { code } = event;
+
+			if (code === 'Escape' || code === 'Backspace') {
+				closeDropDown();
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		document.addEventListener('keydown', handleKeyDownHandler);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+			document.removeEventListener('keydown', handleKeyDownHandler);
+		};
+	}, [closeDropDown]);
 
 	return (
 		open && (
 			<ul
-				ref={ref}
+				ref={menuRef}
 				className={menuClassName}
 				aria-labelledby='dropdown'
 				tabIndex={-1}
