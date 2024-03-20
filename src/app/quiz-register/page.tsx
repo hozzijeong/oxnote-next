@@ -1,36 +1,55 @@
 'use client';
-import { Input, QuizForm } from '@/components';
+import { Input, QuizForm, Selector } from '@/components';
 import styles from './quiz-register.module.scss';
+import { Category } from '../category/types';
+import { UserAnswer, YesOrNoOption } from '@/types/form';
+import useSelector from '@/components/selector/hooks/useSelector';
+import { FormEventHandler, useCallback } from 'react';
 
-// const CATEGORIES: Category[] = [
-// 	{ id: 1, name: '첫 번째' },
-// 	{ id: 2, name: '두 번째' },
-// 	{ id: 3, name: '세 번째' },
-// 	{ id: 4, name: '네 번째' },
-// ];
+const CATEGORIES: Category[] = [
+	{ id: 1, name: '첫 번째' },
+	{ id: 2, name: '두 번째' },
+	{ id: 3, name: '세 번째' },
+	{ id: 4, name: '네 번째' },
+];
 
-// const { YES, NO } = UserAnswer;
+const { YES, NO } = UserAnswer;
 
-// const FAVORITE_SELECT: YesOrNoOption = {
-// 	[YES]: '등록할게요',
-// 	[NO]: '등록하지 않을래요',
-// };
+const FAVORITE_SELECT: YesOrNoOption = {
+	[YES]: '등록할게요',
+	[NO]: '등록하지 않을래요',
+};
 
-// const QUIZ_ANSWER: YesOrNoOption = {
-// 	[YES]: 'O',
-// 	[NO]: 'X',
-// };
-
-// Error: https://github.com/vercel/next.js/issues/41940
+const QUIZ_ANSWER: YesOrNoOption = {
+	[YES]: 'O',
+	[NO]: 'X',
+};
 
 const QuizRegister = () => {
+	const [categorySelected, categoryChangeHandler] = useSelector();
+	const [answerSelected, answerChangeHandler] = useSelector();
+	const [favoriteSelected, favoriteChangeHandler] = useSelector();
+
+	const submitHandler: FormEventHandler<HTMLFormElement> = useCallback(
+		(event) => {
+			event.preventDefault();
+		},
+		[]
+	);
+
 	return (
 		<main className={styles.main}>
-			<QuizForm>
-				<QuizForm.FormElement
-					title='카테고리'
-					htmlFor='category'
-				></QuizForm.FormElement>
+			<QuizForm onSubmit={submitHandler}>
+				<QuizForm.FormElement title='카테고리' htmlFor='category'>
+					<Selector
+						type='single'
+						options={CATEGORIES.map((c) => c.name)}
+						placeholder='카테고리를 선택해주세요'
+						selected={categorySelected}
+						changeHandler={categoryChangeHandler}
+					/>
+				</QuizForm.FormElement>
+
 				<QuizForm.FormElement title='문제' htmlFor='quiz'>
 					<Input
 						id='quiz'
@@ -40,10 +59,16 @@ const QuizRegister = () => {
 						required
 					/>
 				</QuizForm.FormElement>
-				<QuizForm.FormElement
-					title='답'
-					htmlFor='answer'
-				></QuizForm.FormElement>
+
+				<QuizForm.FormElement title='답' htmlFor='answer'>
+					<Selector
+						type='single'
+						options={Object.values(QUIZ_ANSWER)}
+						placeholder='정답을 입력해주세요'
+						selected={answerSelected}
+						changeHandler={answerChangeHandler}
+					/>
+				</QuizForm.FormElement>
 				<QuizForm.FormElement title='해설' htmlFor='explain'>
 					<textarea
 						id='explain'
@@ -53,10 +78,16 @@ const QuizRegister = () => {
 						required
 					/>
 				</QuizForm.FormElement>
-				<QuizForm.FormElement
-					title='즐겨찾기 등록'
-					htmlFor='favorite'
-				></QuizForm.FormElement>
+
+				<QuizForm.FormElement title='즐겨찾기 등록' htmlFor='favorite'>
+					<Selector
+						type='single'
+						options={Object.values(FAVORITE_SELECT)}
+						placeholder='즐겨찾기를 등록하시겠습니까?'
+						selected={favoriteSelected}
+						changeHandler={favoriteChangeHandler}
+					/>
+				</QuizForm.FormElement>
 
 				<QuizForm.SubmitButtons
 					title='등록하기'
