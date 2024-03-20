@@ -1,5 +1,6 @@
 import styles from './selector.module.scss';
 import DropDown, { DropDownType } from '../dropdown/DropDown';
+import { KeyboardEvent, useRef } from 'react';
 
 export type SelectorProps = {
 	type: DropDownType;
@@ -9,30 +10,6 @@ export type SelectorProps = {
 	changeHandler: (type: DropDownType, value: string) => void;
 };
 
-// const clickMenuOutside = useCallback((event: MouseEvent) => {
-// 	if (!menuRef.current) return;
-
-// 	const menu = menuRef.current.getBoundingClientRect();
-
-// 	const isClickInsideMenu =
-// 		menu.top - 48 <= event.clientY &&
-// 		event.clientY <= menu.top + 48 + menu.height &&
-// 		menu.left <= event.clientX &&
-// 		event.clientX <= menu.left + menu.width;
-
-// 	if (isClickInsideMenu) setMenuOpen(false);
-// }, []);
-
-// useEffect(() => {
-// 	if (menuOpen && menuRef.current) {
-// 		window.addEventListener('click', clickMenuOutside);
-// 	}
-
-// 	return () => {
-// 		window.removeEventListener('click', clickMenuOutside);
-// 	};
-// }, [clickMenuOutside, menuOpen]);
-
 const Selector = ({
 	type,
 	options,
@@ -40,6 +17,22 @@ const Selector = ({
 	selected,
 	changeHandler,
 }: SelectorProps) => {
+	const itemRefs = useRef<HTMLLIElement[]>([]);
+
+	const handleKeyDown = (index: number) => (event: KeyboardEvent) => {
+		if (event.key === 'ArrowUp' && index > 0) {
+			itemRefs.current[index - 1].focus();
+		}
+
+		if (event.key === 'ArrowDown' && index < options.length - 1) {
+			itemRefs.current[index + 1].focus();
+		}
+	};
+
+	const refCallback = (index: number) => (el: HTMLLIElement) => {
+		itemRefs.current[index] = el;
+	};
+
 	return (
 		<DropDown type={type} changeHandler={changeHandler}>
 			<DropDown.Trigger
@@ -47,13 +40,15 @@ const Selector = ({
 				disabled={options.length === 0}
 			/>
 			<DropDown.Menu className={styles['menu-container']}>
-				{options.map((item) => {
+				{options.map((item, index) => {
 					const isChecked = selected.includes(item);
 					return (
 						<DropDown.Item
+							ref={refCallback(index)}
 							key={item}
 							itemType={isChecked || type === 'multi' ? 'checkBox' : 'default'}
 							checked={isChecked}
+							onKeyDown={handleKeyDown(index)}
 						>
 							{item}
 						</DropDown.Item>

@@ -1,4 +1,5 @@
 import {
+	KeyboardEventHandler,
 	MouseEventHandler,
 	PropsWithChildren,
 	forwardRef,
@@ -21,17 +22,28 @@ const DropDown = ({ type, changeHandler, children }: DropDownProps) => {
 		if (event.target instanceof HTMLLIElement) {
 			const { textContent } = event.target;
 
-			if (textContent === null) {
-				throw new Error('잘못된 DropDown 사용입니다. 데이터를 확인해주세요');
-			}
+			changeHandler(type, textContent ?? '');
+		}
+	};
 
-			changeHandler(type, textContent);
+	const onKeyDownHandler: KeyboardEventHandler<HTMLDivElement> = (event) => {
+		const { code, target } = event;
+		if (!(target instanceof HTMLLIElement)) return;
+
+		if (code === 'Space' || code === 'Enter') {
+			const { textContent } = target;
+
+			changeHandler(type, textContent ?? '');
 		}
 	};
 
 	return (
 		<DropDownProvider>
-			<div className={styles.wrapper} onClick={onClickHandler}>
+			<div
+				className={styles.wrapper}
+				onClick={onClickHandler}
+				onKeyDown={onKeyDownHandler}
+			>
 				{children}
 			</div>
 		</DropDownProvider>
@@ -44,7 +56,7 @@ type TriggerProps = {
 };
 
 const Trigger = ({ title, disabled }: TriggerProps) => {
-	const { toggleDropDown } = useDropDownToggle();
+	const { open, toggleDropDown } = useDropDownToggle();
 
 	const triggerHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
 		(event) => {
@@ -60,6 +72,8 @@ const Trigger = ({ title, disabled }: TriggerProps) => {
 			onClick={triggerHandler}
 			type='button'
 			disabled={disabled}
+			aria-haspopup='listbox'
+			aria-expanded={open}
 		>
 			{title}
 		</Button>
@@ -80,7 +94,15 @@ const Menu = forwardRef<
 
 	return (
 		open && (
-			<ul ref={ref} className={menuClassName} {...props}>
+			<ul
+				ref={ref}
+				className={menuClassName}
+				aria-labelledby='dropdown'
+				tabIndex={-1}
+				aria-activedescendant='dropdown'
+				role='listbox'
+				{...props}
+			>
 				{children}
 			</ul>
 		)
@@ -92,19 +114,26 @@ type ItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	checked?: boolean;
 };
 
-const Item = ({
-	itemType = 'default',
-	checked,
-	className,
-	...props
-}: ItemProps & MenuBaseProps<HTMLLIElement>) => {
+const Item = forwardRef<
+	HTMLLIElement,
+	ItemProps & MenuBaseProps<HTMLLIElement>
+>(function Item({ itemType = 'default', checked, className, ...props }, ref) {
 	const itemClassName = `${styles['item']} ${
 		itemType === 'checkBox' ? styles['check-box'] : ''
 	} ${itemType === 'checkBox' && checked ? styles['checked'] : ''} ${
 		className ? className : ''
 	}`;
 
-	return <li className={itemClassName} {...props} />;
-};
+	return (
+		<li
+			ref={ref}
+			className={itemClassName}
+			role='option'
+			tabIndex={0}
+			aria-selected={checked}
+			{...props}
+		/>
+	);
+});
 
 export default Object.assign(DropDown, { Trigger, Item, Menu });
