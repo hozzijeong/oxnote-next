@@ -24,9 +24,10 @@ const Selector = ({
 		type,
 	});
 
-	const { refCallback, handleKeyDown } = useDropDownItemController({
-		optionsCount: options.length,
-	});
+	const { refCallback, onKeydownHandler: itemKeydownHandler } =
+		useDropDownItemController({
+			optionsCount: options.length,
+		});
 
 	return (
 		<DropDown
@@ -46,7 +47,7 @@ const Selector = ({
 							key={item}
 							itemType={isChecked || type === 'multi' ? 'checkBox' : 'default'}
 							checked={isChecked}
-							onKeyDown={handleKeyDown(index)}
+							onKeyDown={itemKeydownHandler(index)}
 						>
 							{item}
 						</DropDown.Item>

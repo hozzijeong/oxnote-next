@@ -11,7 +11,7 @@ type CustomKeyboardEventHandler = (
 const useDropDownItemController = ({ optionsCount }: Props) => {
 	const itemRefs = useRef<HTMLLIElement[]>([]);
 
-	const handleKeyDown: CustomKeyboardEventHandler =
+	const onKeydownHandler: CustomKeyboardEventHandler =
 		(index: number) => (event) => {
 			if (event.key === 'ArrowUp' && index > 0) {
 				itemRefs.current[index - 1].focus();
@@ -26,7 +26,7 @@ const useDropDownItemController = ({ optionsCount }: Props) => {
 		itemRefs.current[index] = el;
 	};
 
-	return { refCallback, handleKeyDown };
+	return { refCallback, onKeydownHandler };
 };
 
 export default useDropDownItemController;
