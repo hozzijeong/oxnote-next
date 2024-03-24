@@ -13,8 +13,6 @@ import { Button } from '..';
 import DropDownContext from './context/DropDownContext';
 import useToggle from '@/hooks/useToggle';
 
-export type DropDownType = 'single' | 'multi';
-
 type DropDownProps = PropsWithChildren & {
 	onClickHandler: MouseEventHandler<HTMLDivElement>;
 	onKeyDownHandler: KeyboardEventHandler<HTMLDivElement>;

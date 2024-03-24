@@ -1,5 +1,5 @@
 import { KeyboardEventHandler, MouseEventHandler } from 'react';
-import { DropDownType } from '../DropDown';
+import { DropDownType } from '../types';
 
 type Props = {
 	type: DropDownType;

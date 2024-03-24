@@ -1,7 +1,8 @@
 import styles from './selector.module.scss';
-import DropDown, { DropDownType } from '../dropdown/DropDown';
+import DropDown from '../dropdown/DropDown';
 import useDropDownItemController from '../dropdown/hooks/useDropDownItemController';
 import useDropDownSelectController from '../dropdown/hooks/useDropDownSelectController';
+import { DropDownType } from '../dropdown/types';
 
 export type SelectorProps = {
 	type: DropDownType;
