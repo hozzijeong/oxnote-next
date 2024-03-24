@@ -15,30 +15,15 @@ import useDropDownToggle from './hooks/useDropDownToggle';
 export type DropDownType = 'single' | 'multi';
 
 type DropDownProps = PropsWithChildren & {
-	type: DropDownType;
-	changeHandler: (type: DropDownType, value: string) => void;
+	onClickHandler: MouseEventHandler<HTMLDivElement>;
+	onKeyDownHandler: KeyboardEventHandler<HTMLDivElement>;
 };
 
-const DropDown = ({ type, changeHandler, children }: DropDownProps) => {
-	const onClickHandler: MouseEventHandler<HTMLDivElement> = (event) => {
-		if (event.target instanceof HTMLLIElement) {
-			const { textContent } = event.target;
-
-			changeHandler(type, textContent ?? '');
-		}
-	};
-
-	const onKeyDownHandler: KeyboardEventHandler<HTMLDivElement> = (event) => {
-		const { code, target } = event;
-		if (!(target instanceof HTMLLIElement)) return;
-
-		if (code === 'Space' || code === 'Enter') {
-			const { textContent } = target;
-
-			changeHandler(type, textContent ?? '');
-		}
-	};
-
+const DropDown = ({
+	onClickHandler,
+	onKeyDownHandler,
+	children,
+}: DropDownProps) => {
 	return (
 		<DropDownProvider>
 			<div
@@ -90,10 +75,10 @@ const Menu = forwardRef<
 	HTMLUListElement,
 	PropsWithChildren & MenuBaseProps<HTMLUListElement>
 >(function Menu({ className, children, ...props }, ref) {
+	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
+
 	const { open, closeDropDown } = useDropDownToggle();
 	const menuRef = useRef<HTMLUListElement>(null);
-
-	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {

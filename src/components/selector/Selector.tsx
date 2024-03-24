@@ -1,6 +1,7 @@
 import styles from './selector.module.scss';
 import DropDown, { DropDownType } from '../dropdown/DropDown';
-import { KeyboardEvent, useRef } from 'react';
+import useDropDownItemController from '../dropdown/hooks/useDropDownItemController';
+import useDropDownSelectController from '../dropdown/hooks/useDropDownSelectController';
 
 export type SelectorProps = {
 	type: DropDownType;
@@ -17,24 +18,20 @@ const Selector = ({
 	selected,
 	changeHandler,
 }: SelectorProps) => {
-	const itemRefs = useRef<HTMLLIElement[]>([]);
+	const { onClickHandler, onKeyDownHandler } = useDropDownSelectController({
+		changeHandler,
+		type,
+	});
 
-	const handleKeyDown = (index: number) => (event: KeyboardEvent) => {
-		if (event.key === 'ArrowUp' && index > 0) {
-			itemRefs.current[index - 1].focus();
-		}
-
-		if (event.key === 'ArrowDown' && index < options.length - 1) {
-			itemRefs.current[index + 1].focus();
-		}
-	};
-
-	const refCallback = (index: number) => (el: HTMLLIElement) => {
-		itemRefs.current[index] = el;
-	};
+	const { refCallback, handleKeyDown } = useDropDownItemController({
+		optionsCount: options.length,
+	});
 
 	return (
-		<DropDown type={type} changeHandler={changeHandler}>
+		<DropDown
+			onClickHandler={onClickHandler}
+			onKeyDownHandler={onKeyDownHandler}
+		>
 			<DropDown.Trigger
 				title={selected.length === 0 ? placeholder : selected.join(', ')}
 				disabled={options.length === 0}

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { DropDownType } from '../../dropdown/DropDown';
 
-const useDropDown = (): [
+const useSelector = (): [
 	string[],
 	(type: DropDownType, value: string) => void
 ] => {
@@ -21,4 +21,4 @@ const useDropDown = (): [
 	return [selected, changeHandler];
 };
 
-export default useDropDown;
+export default useSelector;
