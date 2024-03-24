@@ -4,13 +4,14 @@ import {
 	PropsWithChildren,
 	forwardRef,
 	useCallback,
+	useContext,
 	useEffect,
 	useRef,
 } from 'react';
 import styles from './dropdown.module.scss';
 import { Button } from '..';
-import DropDownProvider from './context/DropDownProvider';
-import useDropDownToggle from './hooks/useDropDownToggle';
+import DropDownContext from './context/DropDownContext';
+import useToggle from '@/hooks/useToggle';
 
 export type DropDownType = 'single' | 'multi';
 
@@ -20,70 +21,20 @@ type DropDownProps = PropsWithChildren & {
 };
 
 const DropDown = ({
+	children,
 	onClickHandler,
 	onKeyDownHandler,
-	children,
 }: DropDownProps) => {
-	return (
-		<DropDownProvider>
-			<div
-				className={styles.wrapper}
-				onClick={onClickHandler}
-				onKeyDown={onKeyDownHandler}
-			>
-				{children}
-			</div>
-		</DropDownProvider>
-	);
-};
-
-type TriggerProps = {
-	title: string;
-	disabled?: boolean;
-};
-
-const Trigger = ({ title, disabled }: TriggerProps) => {
-	const { open, toggleDropDown } = useDropDownToggle();
-
-	const triggerHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
-		(event) => {
-			event.stopPropagation();
-			toggleDropDown();
-		},
-		[toggleDropDown]
-	);
-
-	return (
-		<Button
-			className={styles['selector-button']}
-			onClick={triggerHandler}
-			type='button'
-			disabled={disabled}
-			aria-haspopup='listbox'
-			aria-expanded={open}
-		>
-			{title}
-		</Button>
-	);
-};
-
-type MenuBaseProps<T extends HTMLElement> = React.HtmlHTMLAttributes<T> & {
-	className?: string;
-};
-
-const Menu = forwardRef<
-	HTMLUListElement,
-	PropsWithChildren & MenuBaseProps<HTMLUListElement>
->(function Menu({ className, children, ...props }, ref) {
-	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
-
-	const { open, closeDropDown } = useDropDownToggle();
-	const menuRef = useRef<HTMLUListElement>(null);
+	const toggles = useToggle();
+	const dropdownRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
-			if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-				closeDropDown();
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node)
+			) {
+				toggles.close();
 			}
 		};
 
@@ -91,7 +42,7 @@ const Menu = forwardRef<
 			const { code } = event;
 
 			if (code === 'Escape' || code === 'Backspace') {
-				closeDropDown();
+				toggles.close();
 			}
 		};
 
@@ -101,12 +52,68 @@ const Menu = forwardRef<
 			document.removeEventListener('mousedown', handleClickOutside);
 			document.removeEventListener('keydown', handleKeyDownHandler);
 		};
-	}, [closeDropDown]);
+	}, [toggles]);
 
 	return (
-		open && (
+		<DropDownContext.Provider value={toggles}>
+			<div
+				ref={dropdownRef}
+				className={styles.wrapper}
+				onClick={onClickHandler}
+				onKeyDown={onKeyDownHandler}
+			>
+				{children}
+			</div>
+		</DropDownContext.Provider>
+	);
+};
+
+type TriggerProps = {
+	title: string;
+	disabled?: boolean;
+};
+
+const Trigger = ({ title, disabled }: TriggerProps) => {
+	const { isOn: isOpen, toggle } = useContext(DropDownContext);
+
+	const triggerHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
+		(event) => {
+			event.stopPropagation();
+			toggle();
+		},
+		[toggle]
+	);
+
+	return (
+		<Button
+			className={styles['selector-button']}
+			onClick={triggerHandler}
+			type='button'
+			disabled={disabled}
+			aria-haspopup='listbox'
+			aria-expanded={isOpen}
+		>
+			{title}
+		</Button>
+	);
+};
+
+type MenuProps<T extends HTMLElement> = React.HtmlHTMLAttributes<T> & {
+	className?: string;
+};
+
+const Menu = forwardRef<
+	HTMLUListElement,
+	PropsWithChildren & MenuProps<HTMLUListElement>
+>(function Menu({ className, children, ...props }, ref) {
+	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
+
+	const { isOn: isOpen } = useContext(DropDownContext);
+
+	return (
+		isOpen && (
 			<ul
-				ref={menuRef}
+				ref={ref}
 				className={menuClassName}
 				aria-labelledby='dropdown'
 				tabIndex={-1}
@@ -125,26 +132,25 @@ type ItemProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 	checked?: boolean;
 };
 
-const Item = forwardRef<
-	HTMLLIElement,
-	ItemProps & MenuBaseProps<HTMLLIElement>
->(function Item({ itemType = 'default', checked, className, ...props }, ref) {
-	const itemClassName = `${styles['item']} ${
-		itemType === 'checkBox' ? styles['check-box'] : ''
-	} ${itemType === 'checkBox' && checked ? styles['checked'] : ''} ${
-		className ? className : ''
-	}`;
+const Item = forwardRef<HTMLLIElement, ItemProps & MenuProps<HTMLLIElement>>(
+	function Item({ itemType = 'default', checked, className, ...props }, ref) {
+		const itemClassName = `${styles['item']} ${
+			itemType === 'checkBox' ? styles['check-box'] : ''
+		} ${itemType === 'checkBox' && checked ? styles['checked'] : ''} ${
+			className ? className : ''
+		}`;
 
-	return (
-		<li
-			ref={ref}
-			className={itemClassName}
-			role='option'
-			tabIndex={0}
-			aria-selected={checked}
-			{...props}
-		/>
-	);
-});
+		return (
+			<li
+				ref={ref}
+				className={itemClassName}
+				role='option'
+				tabIndex={0}
+				aria-selected={checked}
+				{...props}
+			/>
+		);
+	}
+);
 
 export default Object.assign(DropDown, { Trigger, Item, Menu });

@@ -48,7 +48,7 @@ const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
 		);
 	}, [backClickHandler, backUrl]);
 
-	const { isOn: menuOn, toggleHandler: menuHandler } = useToggle(false);
+	const { isOn: menuOn, toggle: menuHandler } = useToggle(false);
 
 	return (
 		<header className={styles.container}>
