@@ -18,6 +18,8 @@ type DropDownProps = PropsWithChildren & {
 	onKeyDownHandler: KeyboardEventHandler<HTMLDivElement>;
 };
 
+// TODO: DropDown 뿐만 아니라 Modal에서도 적용할 수 있도록 코드를 작성해보기
+
 const DropDown = ({
 	children,
 	onClickHandler,
@@ -70,6 +72,8 @@ type TriggerProps = {
 	title: string;
 	disabled?: boolean;
 };
+
+// TODO: trigger의 형태가 일반적인 selector-button의 형태가 아니라 다른 형식으로도 나타날 수 있을 것 같다는 생각을 함.
 
 const Trigger = ({ title, disabled }: TriggerProps) => {
 	const { isOn: isOpen, toggle } = useContext(DropDownContext);
