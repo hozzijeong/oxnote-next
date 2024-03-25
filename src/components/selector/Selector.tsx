@@ -1,7 +1,10 @@
+import { useMemo } from 'react';
 import DropDown from '../dropdown/DropDown';
-import useDropDownItemController from '../dropdown/hooks/useDropDownItemController';
-import useDropDownSelectController from '../dropdown/hooks/useDropDownSelectController';
-import useDropDownToggleController from '../dropdown/hooks/useDropDownToggleController';
+import {
+	useDropDownItemController,
+	useDropDownSelectController,
+	useDropDownToggleController,
+} from '../dropdown/hooks';
 import { DropDownType } from '../dropdown/types';
 import styles from './selector.module.scss';
 
@@ -32,6 +35,25 @@ const Selector = ({
 			optionsCount: options.length,
 		});
 
+	const optionItems = useMemo(
+		() =>
+			options.map((item, index) => {
+				const isChecked = selected.includes(item);
+				return (
+					<DropDown.Item
+						ref={refCallback(index)}
+						key={item}
+						itemType={isChecked || type === 'multi' ? 'checkBox' : 'default'}
+						checked={isChecked}
+						onKeyDown={itemKeydownHandler(index)}
+					>
+						{item}
+					</DropDown.Item>
+				);
+			}),
+		[itemKeydownHandler, options, refCallback, selected, type]
+	);
+
 	return (
 		<DropDown
 			toggles={toggles}
@@ -44,7 +66,11 @@ const Selector = ({
 				title={selected.length === 0 ? placeholder : selected.join(', ')}
 				disabled={options.length === 0}
 			/>
+			<DropDown.Menu className={styles['menu-container']}>
+				{optionItems}
+			</DropDown.Menu>
 			<DropDown.Modal
+				title={placeholder}
 				control={
 					<div className={styles['modal-controller-container']}>
 						<button
@@ -57,24 +83,7 @@ const Selector = ({
 					</div>
 				}
 			>
-				<ul>
-					{options.map((item, index) => {
-						const isChecked = selected.includes(item);
-						return (
-							<DropDown.Item
-								ref={refCallback(index)}
-								key={item}
-								itemType={
-									isChecked || type === 'multi' ? 'checkBox' : 'default'
-								}
-								checked={isChecked}
-								onKeyDown={itemKeydownHandler(index)}
-							>
-								{item}
-							</DropDown.Item>
-						);
-					})}
-				</ul>
+				<ul>{optionItems}</ul>
 			</DropDown.Modal>
 		</DropDown>
 	);
