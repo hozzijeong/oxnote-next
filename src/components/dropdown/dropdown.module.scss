@@ -1,4 +1,5 @@
 @import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
 
 .wrapper {
 	position: relative;
@@ -77,4 +78,56 @@
 			box-shadow: inset 0 0 0 2px #{$correct};
 		}
 	}
+}
+
+.modal {
+	position: fixed;
+	z-index: #{$modal};
+
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	width: 100%;
+	margin: 0 auto;
+
+	background-color: #{$white};
+	border: none;
+
+	@media (max-width: #{$mid-device-width - 1px}) {
+		max-height: 420px;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
+		bottom: 0;
+		top: auto;
+	}
+
+	@media (min-width: #{$mid-device-width }) {
+		max-width: 720px;
+		max-height: 720px;
+		border-radius: 8px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	&::backdrop {
+		cursor: pointer;
+
+		position: fixed;
+		z-index: #{$modal-backdrop};
+		top: 0;
+		left: 0;
+
+		width: 100%;
+		height: 100%;
+
+		background-color: rgba(0, 0, 0, 0.25);
+	}
+}
+
+.modal-content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 16px 0;
 }
