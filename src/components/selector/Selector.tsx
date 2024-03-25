@@ -7,6 +7,7 @@ import {
 } from '../dropdown/hooks';
 import { DropDownType } from '../dropdown/types';
 import styles from './selector.module.scss';
+import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 
 export type SelectorProps = {
 	type: DropDownType;
@@ -54,6 +55,9 @@ const Selector = ({
 		[itemKeydownHandler, options, refCallback, selected, type]
 	);
 
+	// TODO: mid-device 크기만큼 비교하는 것
+	const isBelowMidDevice = useIsBelowWidth(520);
+
 	return (
 		<DropDown
 			toggles={toggles}
@@ -66,25 +70,28 @@ const Selector = ({
 				title={selected.length === 0 ? placeholder : selected.join(', ')}
 				disabled={options.length === 0}
 			/>
-			<DropDown.Menu className={styles['menu-container']}>
-				{optionItems}
-			</DropDown.Menu>
-			<DropDown.Modal
-				title={placeholder}
-				control={
-					<div className={styles['modal-controller-container']}>
-						<button
-							className={styles['modal-cancel-button']}
-							type='button'
-							onClick={toggles.close}
-						>
-							선택 완료
-						</button>
-					</div>
-				}
-			>
-				<ul>{optionItems}</ul>
-			</DropDown.Modal>
+			{isBelowMidDevice ? (
+				<DropDown.Modal
+					title={placeholder}
+					control={
+						<div className={styles['modal-controller-container']}>
+							<button
+								className={styles['modal-cancel-button']}
+								type='button'
+								onClick={toggles.close}
+							>
+								선택 완료
+							</button>
+						</div>
+					}
+				>
+					<ul>{optionItems}</ul>
+				</DropDown.Modal>
+			) : (
+				<DropDown.Menu className={styles['menu-container']}>
+					{optionItems}
+				</DropDown.Menu>
+			)}
 		</DropDown>
 	);
 };
