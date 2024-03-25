@@ -162,7 +162,7 @@ const Modal = ({
 		<dialog ref={dialogRef} className={modalClassName} onClose={onClose}>
 			{isOpen && (
 				<div className={styles['modal-content']}>
-					{title && <p>{title}</p>}
+					{title && <p className={styles['modal-title']}>{title}</p>}
 					{children}
 					{control && control}
 				</div>
