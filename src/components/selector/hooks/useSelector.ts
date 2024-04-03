@@ -1,10 +1,8 @@
+import type { DropDownType } from '@/components/dropdown/types';
+import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 import { useCallback, useState } from 'react';
-import { DropDownType } from '../../dropdown/DropDown';
 
-const useSelector = (): [
-	string[],
-	(type: DropDownType, value: string) => void
-] => {
+const useSelector = () => {
 	const [selected, setSelected] = useState<string[]>([]);
 
 	const changeHandler = useCallback((type: DropDownType, value: string) => {
@@ -18,7 +16,13 @@ const useSelector = (): [
 		});
 	}, []);
 
-	return [selected, changeHandler];
+	const isModal = useIsBelowWidth(520);
+
+	return {
+		selected,
+		changeHandler,
+		isModal,
+	};
 };
 
 export default useSelector;

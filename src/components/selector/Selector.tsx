@@ -15,6 +15,7 @@ export type SelectorProps = {
 	placeholder: string;
 	selected: string[];
 	changeHandler: (type: DropDownType, value: string) => void;
+	isModal?: boolean;
 };
 
 const Selector = ({
@@ -23,6 +24,7 @@ const Selector = ({
 	placeholder,
 	selected,
 	changeHandler,
+	isModal,
 }: SelectorProps) => {
 	const { toggles, dropdownRef } = useDropDownToggleController();
 
@@ -55,9 +57,6 @@ const Selector = ({
 		[itemKeydownHandler, options, refCallback, selected, type]
 	);
 
-	// TODO: mid-device 크기만큼 비교하는 것
-	const isBelowMidDevice = useIsBelowWidth(520);
-
 	return (
 		<DropDown
 			toggles={toggles}
@@ -70,7 +69,7 @@ const Selector = ({
 				title={selected.length === 0 ? placeholder : selected.join(', ')}
 				disabled={options.length === 0}
 			/>
-			{isBelowMidDevice ? (
+			{isModal ? (
 				<DropDown.Modal
 					title={placeholder}
 					control={

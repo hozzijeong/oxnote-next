@@ -26,9 +26,21 @@ const QUIZ_ANSWER: YesOrNoOption = {
 };
 
 const QuizRegister = () => {
-	const [categorySelected, categoryChangeHandler] = useSelector();
-	const [answerSelected, answerChangeHandler] = useSelector();
-	const [favoriteSelected, favoriteChangeHandler] = useSelector();
+	const {
+		selected: categorySelected,
+		changeHandler: categoryChangeHandler,
+		isModal: isCategoryModal,
+	} = useSelector();
+	const {
+		selected: answerSelected,
+		changeHandler: answerChangeHandler,
+		isModal: isAnswerModal,
+	} = useSelector();
+	const {
+		selected: favoriteSelected,
+		changeHandler: favoriteChangeHandler,
+		isModal: isFavoriteModal,
+	} = useSelector();
 
 	const submitHandler: FormEventHandler<HTMLFormElement> = useCallback(
 		(event) => {
@@ -47,6 +59,7 @@ const QuizRegister = () => {
 						placeholder='카테고리를 선택해주세요'
 						selected={categorySelected}
 						changeHandler={categoryChangeHandler}
+						isModal={isCategoryModal}
 					/>
 				</QuizForm.FormElement>
 
@@ -67,6 +80,7 @@ const QuizRegister = () => {
 						placeholder='정답을 입력해주세요'
 						selected={answerSelected}
 						changeHandler={answerChangeHandler}
+						isModal={isAnswerModal}
 					/>
 				</QuizForm.FormElement>
 				<QuizForm.FormElement title='해설' htmlFor='explain'>
@@ -86,6 +100,7 @@ const QuizRegister = () => {
 						placeholder='즐겨찾기를 등록하시겠습니까?'
 						selected={favoriteSelected}
 						changeHandler={favoriteChangeHandler}
+						isModal={isFavoriteModal}
 					/>
 				</QuizForm.FormElement>
 
