@@ -3,6 +3,7 @@
 import styles from './quiz-form.module.scss';
 import { PropsWithChildren } from 'react';
 import { InputLabel, Button } from '@/components';
+import { ButtonProps } from '../button/Button';
 
 const QuizForm = ({
 	children,
@@ -10,27 +11,15 @@ const QuizForm = ({
 	return <form className={styles['quiz-form']}>{children}</form>;
 };
 
-type SubmitButtonProps = {
-	title: string;
-	cancelHandler: () => void;
+type SubmitButtonProps = ButtonProps & {
+	type: 'reset' | 'submit';
 };
 
-const SubmitButtons = (props: SubmitButtonProps) => {
-	const { title, cancelHandler } = props;
-
-	return (
-		<div className={styles['button-container']}>
-			<Button type='reset' size='small' onClick={cancelHandler}>
-				취소하기
-			</Button>
-			<Button type='submit' size='small' color='primary'>
-				{title}
-			</Button>
-		</div>
-	);
+const SubmitButton = (props: SubmitButtonProps) => {
+	return <Button {...props} />;
 };
 
 export default Object.assign(QuizForm, {
 	FormElement: InputLabel,
-	SubmitButtons,
+	SubmitButton,
 });

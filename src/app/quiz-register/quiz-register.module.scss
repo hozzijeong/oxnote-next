@@ -22,3 +22,10 @@
 		line-height: inherit !important;
 	}
 }
+
+.button-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+}

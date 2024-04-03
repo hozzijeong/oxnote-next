@@ -104,10 +104,12 @@ const QuizRegister = () => {
 					/>
 				</QuizForm.FormElement>
 
-				<QuizForm.SubmitButtons
-					title='등록하기'
-					cancelHandler={() => console.log('cancel')}
-				/>
+				<div className={styles['button-container']}>
+					<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
+					<QuizForm.SubmitButton type='submit' color='primary'>
+						제출하기
+					</QuizForm.SubmitButton>
+				</div>
 			</QuizForm>
 		</main>
 	);
