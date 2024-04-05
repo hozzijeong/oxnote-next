@@ -9,6 +9,15 @@ const nextConfig = {
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'styles')],
 	},
+	async redirects() {
+		return [
+			{
+				source: '/',
+				destination: '/quiz-register',
+				permanent: true,
+			},
+		];
+	},
 };
 
 export default nextConfig;
