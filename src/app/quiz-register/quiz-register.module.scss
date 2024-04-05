@@ -1,0 +1,31 @@
+@import '../root.module.scss';
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
+
+.explain {
+	height: 240px;
+	padding: 10px;
+	border: 1px solid #{$gray-80};
+	border-radius: 4px;
+	box-shadow: inset 1px 1px 2px 0 rgb(0 0 0 / 4%);
+	color: #{$gray-100};
+	resize: none;
+	@include fontMedium;
+
+	&:focus {
+		border: 1px solid #{$correct};
+		outline: none;
+	}
+
+	&::placeholder {
+		color: #{$gray-80};
+		line-height: inherit !important;
+	}
+}
+
+.button-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+}
