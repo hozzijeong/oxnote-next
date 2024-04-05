@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-const useToggle = (initialValue = false) => {
+export type ToggleValues = {
+	toggle: () => void;
+	close: () => void;
+	open: () => void;
+	isOn: boolean;
+};
+
+const useToggle = (initialValue = false): ToggleValues => {
 	const [isOn, setIsOn] = useState(initialValue);
 
-	const toggleHandler = () => setIsOn((prev) => !prev);
+	const toggle = useCallback(() => setIsOn((prev) => !prev), []);
+	const close = useCallback(() => setIsOn(false), []);
+	const open = useCallback(() => setIsOn(true), []);
 
-	return { toggleHandler, isOn };
+	return useMemo(
+		() => ({ toggle, close, open, isOn }),
+		[close, isOn, open, toggle]
+	);
 };
 
 export default useToggle;

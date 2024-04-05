@@ -1,4 +1,4 @@
-import { UserAnswer, UserAnswerOption } from '@/app/types/form';
+import { UserAnswer, UserAnswerOption } from '@/types/form';
 
 export const ANSWER_OPTIONS: UserAnswerOption = {
 	[UserAnswer.YES]: '예',

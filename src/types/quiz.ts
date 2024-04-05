@@ -1,5 +1,5 @@
-import { Category } from '../category/types';
-import { UserAnswer, YesOrNo } from './form';
+import { Category } from '@/app/category/types';
+import { UserAnswer, YesOrNo } from '@/types/form';
 
 export interface Quiz {
 	quiz: string;

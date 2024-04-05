@@ -26,20 +26,19 @@ const Item = ({
 	return <button className={itemClassName} type={type} {...props} />;
 };
 
-const Menu = Object.assign(
-	forwardRef<HTMLDivElement, PropsWithChildren & Props<HTMLDivElement>>(
-		({ className, children, ...props }, ref) => {
-			const menuClassName = `${styles['menu']} ${className ? className : ''}`;
-			return (
-				<div ref={ref} className={menuClassName} {...props}>
-					{children}
-				</div>
-			);
-		}
-	),
-	{
-		Item,
-	}
-);
+const Menu = forwardRef<
+	HTMLDivElement,
+	PropsWithChildren & Props<HTMLDivElement>
+>(function Menu({ className, children, ...props }, ref) {
+	const menuClassName = `${styles['menu']} ${className ? className : ''}`;
 
-export default Menu;
+	return (
+		<div ref={ref} className={menuClassName} {...props}>
+			{children}
+		</div>
+	);
+});
+
+export default Object.assign(Menu, {
+	Item,
+});

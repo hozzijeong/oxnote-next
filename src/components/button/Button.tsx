@@ -4,19 +4,25 @@ import styles from './button.module.scss';
 type Size = 'small' | 'large';
 type Color = 'default' | 'primary';
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	size?: Size;
 	color?: Color;
 	className?: string;
+	children: React.ReactNode;
 };
 
-const Button = forwardRef<HTMLButtonElement, Props>(
-	({ size = 'large', color = 'default', className, ...props }, ref) => {
-		const buttonClassName = `${styles['base']} ${styles[size]} ${
-			styles[color]
-		} ${className ? `${className}` : ''}`;
-		return <button ref={ref} {...props} className={buttonClassName} />;
-	}
-);
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+	{ size = 'large', color = 'default', className, children, ...props },
+	ref
+) {
+	const buttonClassName = `${styles['base']} ${styles[size]} ${styles[color]} ${
+		className ? `${className}` : ''
+	}`;
+	return (
+		<button ref={ref} {...props} className={buttonClassName}>
+			{children}
+		</button>
+	);
+});
 
 export default Button;
