@@ -28,7 +28,7 @@ const Selector = ({
 }: SelectorProps) => {
 	const { toggles, dropdownRef } = useDropDownToggleController();
 
-	const { onClickHandler, onKeyDownHandler } = useDropDownSelectController({
+	const { clickHandler, keyDownHandler } = useDropDownSelectController({
 		changeHandler,
 		type,
 	});
@@ -61,8 +61,8 @@ const Selector = ({
 		<DropDown
 			toggles={toggles}
 			ref={dropdownRef}
-			onClickHandler={onClickHandler}
-			onKeyDownHandler={onKeyDownHandler}
+			clickHandler={clickHandler}
+			keyDownHandler={keyDownHandler}
 		>
 			<DropDown.Trigger
 				className={selected.length === 0 ? styles['placeholder'] : ''}

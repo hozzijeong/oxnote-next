@@ -7,7 +7,7 @@ type Props = {
 };
 
 const useDropDownSelectController = ({ type, changeHandler }: Props) => {
-	const onClickHandler: MouseEventHandler<HTMLDivElement> = (event) => {
+	const clickHandler: MouseEventHandler<HTMLDivElement> = (event) => {
 		if (event.target instanceof HTMLLIElement) {
 			const { textContent } = event.target;
 
@@ -15,7 +15,7 @@ const useDropDownSelectController = ({ type, changeHandler }: Props) => {
 		}
 	};
 
-	const onKeyDownHandler: KeyboardEventHandler<HTMLDivElement> = (event) => {
+	const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = (event) => {
 		const { code, target } = event;
 		if (!(target instanceof HTMLLIElement)) return;
 
@@ -26,7 +26,7 @@ const useDropDownSelectController = ({ type, changeHandler }: Props) => {
 		}
 	};
 
-	return { onClickHandler, onKeyDownHandler };
+	return { clickHandler, keyDownHandler };
 };
 
 export default useDropDownSelectController;

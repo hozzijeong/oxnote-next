@@ -16,14 +16,14 @@ import { ToggleValues } from '@/hooks/useToggle';
 
 type DropDownProps = PropsWithChildren & {
 	toggles: ToggleValues;
-	onClickHandler?: MouseEventHandler<HTMLDivElement>;
-	onKeyDownHandler?: KeyboardEventHandler<HTMLDivElement>;
+	clickHandler?: MouseEventHandler<HTMLDivElement>;
+	keyDownHandler?: KeyboardEventHandler<HTMLDivElement>;
 };
 
 // TODO: DropDown 뿐만 아니라 Modal에서도 적용할 수 있도록 코드를 작성해보기
 
 const DropDown = forwardRef<HTMLDivElement, DropDownProps>(function DropDown(
-	{ children, onClickHandler, onKeyDownHandler, toggles },
+	{ children, clickHandler, keyDownHandler, toggles },
 	ref
 ) {
 	return (
@@ -31,8 +31,8 @@ const DropDown = forwardRef<HTMLDivElement, DropDownProps>(function DropDown(
 			<div
 				ref={ref}
 				className={styles.wrapper}
-				onClick={onClickHandler}
-				onKeyDown={onKeyDownHandler}
+				onClick={clickHandler}
+				onKeyDown={keyDownHandler}
 			>
 				{children}
 			</div>
