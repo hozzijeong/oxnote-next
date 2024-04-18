@@ -10,13 +10,17 @@ const nextConfig = {
 		includePaths: [path.join(__dirname, 'styles')],
 	},
 	async redirects() {
-		return [
-			{
-				source: '/',
-				destination: '/quiz-register',
-				permanent: true,
-			},
-		];
+		if (process.env.HOME_REDIRECT) {
+			return [
+				{
+					source: process.env.HOME,
+					destination: process.env.HOME_REDIRECT,
+					permanent: false,
+				},
+			];
+		}
+
+		return [];
 	},
 };
 
