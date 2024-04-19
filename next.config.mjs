@@ -10,11 +10,11 @@ const nextConfig = {
 		includePaths: [path.join(__dirname, 'styles')],
 	},
 	async redirects() {
-		if (process.env.HOME_REDIRECT) {
+		if (process.env.NEXT_PUBLIC_HOME_REDIRECT) {
 			return [
 				{
-					source: process.env.HOME,
-					destination: process.env.HOME_REDIRECT,
+					source: process.env.NEXT_PUBLIC_HOME,
+					destination: process.env.NEXT_PUBLIC_HOME_REDIRECT,
 					permanent: false,
 				},
 			];
