@@ -15,6 +15,9 @@ export const http = {
 	post: async <T, V>(endPoint: RequestInfo | URL, params: V): Promise<T> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify(params),
 		});
 
