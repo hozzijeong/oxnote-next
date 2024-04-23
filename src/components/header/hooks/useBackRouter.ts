@@ -1,5 +1,5 @@
 import { URL_PATH } from '@/constants/path';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 const isKeyofURLPath = (backUrl: any): backUrl is keyof typeof URL_PATH => {
