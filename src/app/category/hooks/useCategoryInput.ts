@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Category } from '../types';
 
-const useCategoryInput = (categories: Category[]) => {
+export const useCategoryInput = (categoryList: Category[]) => {
 	const [categoryInput, setCategoryInput] = useState('');
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
@@ -28,5 +28,3 @@ const useCategoryInput = (categories: Category[]) => {
 
 	return { categoryInput, inputChangeHandler, addCategoryHandler };
 };
-
-export default useCategoryInput;
