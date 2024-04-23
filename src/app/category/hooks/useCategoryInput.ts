@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Category } from '../types';
+import { useAddCategory } from './useAddCategory';
 
 export const useCategoryInput = (categoryList: Category[]) => {
 	const [categoryInput, setCategoryInput] = useState('');
+	const addCategory = useAddCategory();
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
 		event
@@ -22,6 +24,15 @@ export const useCategoryInput = (categoryList: Category[]) => {
 		);
 
 		if (result) {
+			if (categoryList.map((c) => c.name).includes(categoryInput)) {
+				alert(`${categoryInput}은 중복되는 카테고리입니다`);
+
+				return;
+			}
+			addCategory({
+				id: `${Date.now()}`,
+				name: categoryInput,
+			});
 			setCategoryInput('');
 		}
 	};
