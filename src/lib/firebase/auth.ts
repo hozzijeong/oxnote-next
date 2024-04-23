@@ -3,10 +3,12 @@ import {
 	signInWithPopup,
 	onAuthStateChanged as _onAuthStateChanged,
 	type UserCredential,
+	User,
+	type NextOrObserver,
 } from 'firebase/auth';
 import { auth } from '.';
 
-export const onAuthStateChanged = (cb: () => void) => {
+export const onAuthStateChanged = (cb: NextOrObserver<User>) => {
 	return _onAuthStateChanged(auth, cb);
 };
 
