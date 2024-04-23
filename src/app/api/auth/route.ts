@@ -1,4 +1,4 @@
-import { getDocumentInfos, updateDocumentData } from '@/lib/firebase';
+import { getDocumentSnapshot, updateDocumentData } from '@/lib/firebase';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -18,7 +18,25 @@ export const POST = withFilter(
 		const body = (await req.json()) as BodyParams;
 
 		try {
-			const response = await getDocumentInfos(`${body.uid}/user`);
+			const snapshot = await getDocumentSnapshot(`${body.uid}/user`);
+
+			if (!snapshot.exists()) {
+				await updateDocumentData({ path: `${body.uid}/user`, data: body });
+				await updateDocumentData({ path: `${body.uid}/category`, data: {} });
+				await updateDocumentData({ path: `${body.uid}/quiz`, data: {} });
+
+				return new NextResponse(
+					JSON.stringify({
+						message: RESPONSE_MESSAGE.SUCCESS,
+						code: HTTP_STATUS_CODE.CREATED,
+						data: null,
+						errors: null,
+					}),
+					{
+						status: HTTP_STATUS_CODE.CREATED,
+					}
+				);
+			}
 
 			return new NextResponse(
 				JSON.stringify({
@@ -32,19 +50,18 @@ export const POST = withFilter(
 				}
 			);
 		} catch (e) {
-			// NOTE: 만약에 현재 존재하지 않는 사용자라면 해당 값 리턴
-			// TODO: 에러 타입 구분하기
-			await updateDocumentData({ path: `${body.uid}/user`, data: body });
-
 			return new NextResponse(
 				JSON.stringify({
-					message: RESPONSE_MESSAGE.SUCCESS,
-					code: HTTP_STATUS_CODE.CREATED,
+					message: RESPONSE_MESSAGE.FAILURE,
+					code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
 					data: null,
-					errors: null,
+					errors: {
+						code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+						message: `확인되지 않은 에러가 발생했습니다 : ${JSON.stringify(e)}`,
+					},
 				}),
 				{
-					status: HTTP_STATUS_CODE.CREATED,
+					status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
 				}
 			);
 		}
