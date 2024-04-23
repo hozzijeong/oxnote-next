@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { Category } from '../types';
-import { useAddCategory } from './useAddCategory';
+import { useCreateCategory } from '.';
 
 export const useCategoryInput = (categoryList: Category[]) => {
 	const [categoryInput, setCategoryInput] = useState('');
-	const addCategory = useAddCategory();
+	const createCategory = useCreateCategory();
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
 		event
@@ -29,7 +29,7 @@ export const useCategoryInput = (categoryList: Category[]) => {
 
 				return;
 			}
-			addCategory({
+			createCategory({
 				id: `${Date.now()}`,
 				name: categoryInput,
 			});
