@@ -12,7 +12,7 @@ const QuizForm = ({
 };
 
 type SubmitButtonProps = ButtonProps & {
-	type: 'reset' | 'submit';
+	type: 'reset' | 'button' | 'submit';
 };
 
 const SubmitButton = (props: SubmitButtonProps) => {
