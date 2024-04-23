@@ -9,6 +9,7 @@ import {
 	RESPONSE_MESSAGE,
 	withFilter,
 } from '@/lib/with-filter';
+import { REQUEST_CONFLICT } from '@/lib/with-filter/with-filter.const';
 import { NextResponse } from 'next/server';
 
 type Category = {
@@ -91,11 +92,27 @@ export const POST = withFilter(
 		const { cookies } = req;
 		const params = (await req.json()) as Category;
 
-		const id = cookies.get('user-id');
+		const cookie = cookies.get('user-id');
+
+		const currentCategoryList = await getDocumentSnapshot(
+			`${cookie?.value}/category`
+		);
+
+		if (currentCategoryList.exists()) {
+			for (const name of Object.values(currentCategoryList.data())) {
+				if (name === params.name) {
+					return new NextResponse(JSON.stringify(REQUEST_CONFLICT), {
+						status: HTTP_STATUS_CODE.CONFLICT,
+					});
+				}
+			}
+		}
 
 		await updateDocumentData({
-			path: `${id}/category`,
-			data: params,
+			path: `${cookie?.value}/category`,
+			data: {
+				[params.id]: params.name,
+			},
 			merge: true,
 		});
 
