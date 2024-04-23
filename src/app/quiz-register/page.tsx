@@ -5,13 +5,7 @@ import { Category } from '../category/types';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
 import { FormEventHandler, useCallback } from 'react';
-
-const CATEGORIES: Category[] = [
-	{ id: 1, name: '첫 번째' },
-	{ id: 2, name: '두 번째' },
-	{ id: 3, name: '세 번째' },
-	{ id: 4, name: '네 번째' },
-];
+import { useGetCategoryList } from '../category/hooks';
 
 const { YES, NO } = UserAnswer;
 
@@ -25,7 +19,9 @@ const QUIZ_ANSWER: YesOrNoOption = {
 	[NO]: 'X',
 };
 
-const QuizRegister = () => {
+const QuizRegisterPage = () => {
+	const categoryList = useGetCategoryList();
+
 	const {
 		selected: categorySelected,
 		changeHandler: categoryChangeHandler,
@@ -55,7 +51,7 @@ const QuizRegister = () => {
 				<QuizForm.FormElement title='카테고리' htmlFor='category'>
 					<Selector
 						type='single'
-						options={CATEGORIES.map((c) => c.name)}
+						options={categoryList.map((c) => c.name)}
 						placeholder='카테고리를 선택해주세요'
 						selected={categorySelected}
 						changeHandler={categoryChangeHandler}
@@ -115,4 +111,4 @@ const QuizRegister = () => {
 	);
 };
 
-export default QuizRegister;
+export default QuizRegisterPage;
