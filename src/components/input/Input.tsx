@@ -8,12 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-	{ mode, ...props },
+	{ mode, className, ...props },
 	ref
 ) {
-	const className = `${styles.base} ${mode ? styles[mode] : ''}`;
+	const currentClassName = `${styles.base} ${className} ${
+		mode ? styles[mode] : ''
+	}`;
 
-	return <input ref={ref} {...props} className={className} />;
+	return <input ref={ref} {...props} className={currentClassName} />;
 });
 
 export default Input;

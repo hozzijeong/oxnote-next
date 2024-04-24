@@ -7,10 +7,7 @@ import useToggle from '@/hooks/useToggle';
 import Image from 'next/image';
 import styles from './header.module.scss';
 import { useRouter } from 'next/navigation';
-
-const isKeyofURLPath = (backUrl: any): backUrl is keyof typeof URL_PATH => {
-	return backUrl in URL_PATH;
-};
+import { useBackRouter } from './hooks/useBackRouter';
 
 interface HeaderProps {
 	title: string;
@@ -20,23 +17,7 @@ interface HeaderProps {
 }
 
 const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
-	const router = useRouter();
-
-	const backClickHandler = useCallback(() => {
-		let historyBackUrl: string | number = -1;
-
-		if (isKeyofURLPath(backUrl)) {
-			historyBackUrl = pathId
-				? `${URL_PATH[backUrl]}/${pathId}`
-				: URL_PATH[backUrl];
-		}
-
-		if (typeof historyBackUrl === 'number') {
-			router.back();
-		} else {
-			router.push(historyBackUrl);
-		}
-	}, [backUrl, pathId, router]);
+	const backClickHandler = useBackRouter(pathId, backUrl);
 
 	const backUrlButton = useMemo(() => {
 		return (

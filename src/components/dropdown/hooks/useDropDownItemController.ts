@@ -1,3 +1,5 @@
+'use client';
+
 import { KeyboardEventHandler, useRef } from 'react';
 
 type Props = {

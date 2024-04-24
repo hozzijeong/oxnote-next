@@ -1,17 +1,16 @@
 'use client';
 import { Input, QuizForm, Selector } from '@/components';
 import styles from './quiz-register.module.scss';
-import { Category } from '../category/types';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
-import { FormEventHandler, useCallback } from 'react';
-
-const CATEGORIES: Category[] = [
-	{ id: 1, name: '첫 번째' },
-	{ id: 2, name: '두 번째' },
-	{ id: 3, name: '세 번째' },
-	{ id: 4, name: '네 번째' },
-];
+import {
+	ChangeEventHandler,
+	MouseEventHandler,
+	useCallback,
+	useState,
+} from 'react';
+import { useGetCategoryList } from '../category/hooks';
+import { useCreateQuiz } from './hooks/useCreateQuiz';
 
 const { YES, NO } = UserAnswer;
 
@@ -25,7 +24,10 @@ const QUIZ_ANSWER: YesOrNoOption = {
 	[NO]: 'X',
 };
 
-const QuizRegister = () => {
+const QuizRegisterPage = () => {
+	const categoryList = useGetCategoryList();
+	const createQuiz = useCreateQuiz();
+
 	const {
 		selected: categorySelected,
 		changeHandler: categoryChangeHandler,
@@ -42,20 +44,57 @@ const QuizRegister = () => {
 		isModal: isFavoriteModal,
 	} = useSelector();
 
-	const submitHandler: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
+	const [title, setTitle] = useState('');
+	const [explain, setExplain] = useState('');
+
+	const titleChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
+		setTitle(e.currentTarget.value);
+	};
+
+	const explainChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+		setExplain(e.currentTarget.value);
+	};
+
+	const submitHandler: MouseEventHandler<HTMLButtonElement> = useCallback(
+		async (event) => {
 			event.preventDefault();
+
+			const categoryId = categoryList.find(
+				(c) => c.name === categorySelected[0]
+			);
+
+			if (!categoryId) {
+				return;
+			}
+
+			const result = await createQuiz({
+				categoryId: categoryId.id,
+				title,
+				explain,
+				answer: answerSelected[0] === 'O' ? true : false,
+				favorite: favoriteSelected[0] === 'O' ? true : false,
+			});
+
+			console.log(result);
 		},
-		[]
+		[
+			answerSelected,
+			categoryList,
+			categorySelected,
+			createQuiz,
+			explain,
+			favoriteSelected,
+			title,
+		]
 	);
 
 	return (
 		<main className={styles.main}>
-			<QuizForm onSubmit={submitHandler}>
+			<QuizForm>
 				<QuizForm.FormElement title='카테고리' htmlFor='category'>
 					<Selector
 						type='single'
-						options={CATEGORIES.map((c) => c.name)}
+						options={categoryList.map((c) => c.name)}
 						placeholder='카테고리를 선택해주세요'
 						selected={categorySelected}
 						changeHandler={categoryChangeHandler}
@@ -69,6 +108,8 @@ const QuizRegister = () => {
 						mode='text'
 						name='quiz'
 						placeholder='문제를 입력해주세요'
+						onChange={titleChangeHandler}
+						value={title}
 						required
 					/>
 				</QuizForm.FormElement>
@@ -89,6 +130,8 @@ const QuizRegister = () => {
 						className={styles.explain}
 						name='explain'
 						placeholder='해설을 입력해주세요'
+						onChange={explainChangeHandler}
+						value={explain}
 						required
 					/>
 				</QuizForm.FormElement>
@@ -106,7 +149,11 @@ const QuizRegister = () => {
 
 				<div className={styles['button-container']}>
 					<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
-					<QuizForm.SubmitButton type='submit' color='primary'>
+					<QuizForm.SubmitButton
+						type='button'
+						color='primary'
+						onClick={submitHandler}
+					>
 						제출하기
 					</QuizForm.SubmitButton>
 				</div>
@@ -115,4 +162,4 @@ const QuizRegister = () => {
 	);
 };
 
-export default QuizRegister;
+export default QuizRegisterPage;

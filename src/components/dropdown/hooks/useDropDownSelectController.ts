@@ -1,3 +1,5 @@
+'use client';
+
 import { KeyboardEventHandler, MouseEventHandler } from 'react';
 import { DropDownType } from '../types';
 

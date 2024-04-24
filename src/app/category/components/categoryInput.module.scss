@@ -12,6 +12,7 @@
 
 .add-input {
 	width: 75%;
+	height: #{$button-height};
 }
 
 .add-button {
@@ -20,4 +21,5 @@
 	border-radius: 8px;
 	background-color: #{$correct};
 	color: #{$white};
+	height: #{$button-height};
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import useToggle from '@/hooks/useToggle';
 import { useEffect, useRef } from 'react';
 
