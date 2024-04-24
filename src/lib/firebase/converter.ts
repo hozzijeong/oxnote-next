@@ -1,6 +1,8 @@
 import { Category } from '@/app/category/types';
 import { Quiz } from '@/types/quiz';
+import { User } from 'firebase/auth';
 import {
+	DocumentData,
 	FirestoreDataConverter,
 	QueryDocumentSnapshot,
 	SnapshotOptions,
@@ -21,7 +23,7 @@ export const quizConverter: FirestoreDataConverter<Quiz> = {
 			favorite: data.favorite,
 		};
 	},
-	toFirestore(quiz: Quiz): FirebaseFirestore.DocumentData {
+	toFirestore(quiz: Quiz): DocumentData {
 		return {
 			...quiz,
 		};
@@ -44,9 +46,30 @@ export const categoryConverter: FirestoreDataConverter<Category[]> = {
 		}
 		return result;
 	},
-	toFirestore(category: Category[]): FirebaseFirestore.DocumentData {
+	toFirestore(category: Category[]): DocumentData {
 		return {
 			[category[0].id]: category[0].name,
+		};
+	},
+};
+
+export const userConverter: FirestoreDataConverter<
+	Pick<User, 'uid' | 'displayName' | 'email'>
+> = {
+	fromFirestore(
+		snapshot: QueryDocumentSnapshot,
+		options: SnapshotOptions
+	): Pick<User, 'uid' | 'displayName' | 'email'> {
+		const data = snapshot.data(options);
+		return {
+			uid: data.uid,
+			displayName: data.userName,
+			email: data.email,
+		};
+	},
+	toFirestore(user: Pick<User, 'uid' | 'displayName' | 'email'>): DocumentData {
+		return {
+			...user,
 		};
 	},
 };
