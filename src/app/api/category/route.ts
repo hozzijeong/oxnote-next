@@ -1,4 +1,4 @@
-// 카테고리 조회 메서드
+import { categoryConverter } from '@/lib/firebase/converter';
 import {
 	getDocumentSnapshot,
 	updateDocumentData,
@@ -7,17 +7,17 @@ import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
 	RESPONSE_MESSAGE,
-	withFilter,
-} from '@/lib/with-filter';
-import { REQUEST_CONFLICT } from '@/lib/with-filter/with-filter.const';
-import { NextResponse } from 'next/server';
+	nextResponseWithResponseType,
+	requestWrapper,
+} from '@/lib/request-wrapper';
+import { REQUEST_CONFLICT } from '@/lib/request-wrapper/constants';
 
 type Category = {
 	id: string;
 	name: string;
 };
 
-export const GET = withFilter<Category[]>(
+export const GET = requestWrapper(
 	async (req) => {
 		try {
 			const { cookies } = req;
@@ -25,48 +25,40 @@ export const GET = withFilter<Category[]>(
 			const cookie = cookies.get('user-id');
 
 			const categorySnapshot = await getDocumentSnapshot(
-				`${cookie?.value}/category`
+				`${cookie?.value}/category`,
+				categoryConverter
 			);
 
 			if (!categorySnapshot.exists()) {
-				return new NextResponse(
-					JSON.stringify({
+				return nextResponseWithResponseType({
+					body: {
 						message: RESPONSE_MESSAGE.SUCCESS,
 						code: HTTP_STATUS_CODE.OK,
 						data: [],
 						errors: null,
-					}),
-					{
+					},
+					options: {
 						status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-					}
-				);
+					},
+				});
 			}
-
-			const category: Category[] = [];
 
 			const data = categorySnapshot.data();
 
-			Object.entries(data).forEach(([id, name]) => {
-				category.push({
-					id,
-					name,
-				});
-			});
-
-			return new NextResponse(
-				JSON.stringify({
+			return nextResponseWithResponseType({
+				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.OK,
-					data: category,
+					data: data,
 					errors: null,
-				}),
-				{
+				},
+				options: {
 					status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-				}
-			);
+				},
+			});
 		} catch (error) {
-			return new NextResponse(
-				JSON.stringify({
+			return nextResponseWithResponseType({
+				body: {
 					message: RESPONSE_MESSAGE.FAILURE,
 					code: null,
 					data: null,
@@ -76,9 +68,9 @@ export const GET = withFilter<Category[]>(
 							error
 						)}`,
 					},
-				}),
-				{ status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR }
-			);
+				},
+				options: { status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR },
+			});
 		}
 	},
 	{
@@ -87,7 +79,7 @@ export const GET = withFilter<Category[]>(
 	}
 );
 
-export const POST = withFilter(
+export const POST = requestWrapper(
 	async (req) => {
 		const { cookies } = req;
 		const params = (await req.json()) as Category;
@@ -95,16 +87,18 @@ export const POST = withFilter(
 		const cookie = cookies.get('user-id');
 
 		const currentCategoryList = await getDocumentSnapshot(
-			`${cookie?.value}/category`
+			`${cookie?.value}/category`,
+			categoryConverter
 		);
 
 		if (currentCategoryList.exists()) {
-			for (const name of Object.values(currentCategoryList.data())) {
-				if (name === params.name) {
-					return new NextResponse(JSON.stringify(REQUEST_CONFLICT), {
+			if (currentCategoryList.data().find((d) => d.name === params.name)) {
+				return nextResponseWithResponseType({
+					body: REQUEST_CONFLICT,
+					options: {
 						status: HTTP_STATUS_CODE.CONFLICT,
-					});
-				}
+					},
+				});
 			}
 		}
 
@@ -116,17 +110,15 @@ export const POST = withFilter(
 			merge: true,
 		});
 
-		return new NextResponse(
-			JSON.stringify({
+		return nextResponseWithResponseType({
+			body: {
 				message: RESPONSE_MESSAGE.SUCCESS,
 				code: HTTP_STATUS_CODE.CREATED,
 				data: null,
 				errors: null,
-			}),
-			{
-				status: HTTP_STATUS_CODE.CREATED,
-			}
-		);
+			},
+			options: { status: HTTP_STATUS_CODE.CREATED },
+		});
 	},
 	{ methodWhiteList: [HTTP_METHOD.POST], certification: true }
 );

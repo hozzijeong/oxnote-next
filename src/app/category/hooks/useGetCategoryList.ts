@@ -3,7 +3,7 @@
 import { http } from '@/lib/api';
 import { useEffect, useState } from 'react';
 import type { Category } from '../types';
-import type { ResponseType } from '@/lib/with-filter/with-filter.types';
+import type { ResponseType } from '@/lib/request-wrapper/types';
 
 // NOTE: 카테고리 리스트를 반환하는 리액트 훅
 export const useGetCategoryList = () => {

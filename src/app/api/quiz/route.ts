@@ -4,14 +4,14 @@ import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
 	RESPONSE_MESSAGE,
-	withFilter,
-} from '@/lib/with-filter';
+	nextResponseWithResponseType,
+	requestWrapper,
+} from '@/lib/request-wrapper';
 import { getDoc } from 'firebase/firestore';
-import { NextResponse } from 'next/server';
 
 const GET = () => {};
 
-export const POST = withFilter(
+export const POST = requestWrapper(
 	async (req) => {
 		const { cookies } = req;
 
@@ -31,14 +31,17 @@ export const POST = withFilter(
 
 		const snapshot = await getDoc(createdReference);
 
-		return new NextResponse(
-			JSON.stringify({
+		return nextResponseWithResponseType({
+			body: {
 				message: RESPONSE_MESSAGE.SUCCESS,
 				code: HTTP_STATUS_CODE.CREATED,
 				data: snapshot.data(),
 				errors: null,
-			})
-		);
+			},
+			options: {
+				status: HTTP_STATUS_CODE.CREATED,
+			},
+		});
 	},
 	{
 		methodWhiteList: [HTTP_METHOD.POST],
