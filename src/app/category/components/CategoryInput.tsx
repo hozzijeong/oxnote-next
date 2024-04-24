@@ -1,6 +1,6 @@
 'use client';
 
-import useCategoryInput from '../hooks/useCategoryInput';
+import { useCategoryInput } from '../hooks';
 import { Category } from '../types';
 import styles from './categoryInput.module.scss';
 import { Button, Input } from '@/components';

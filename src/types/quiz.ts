@@ -1,32 +1,29 @@
 import { Category } from '@/app/category/types';
-import { UserAnswer, YesOrNo } from '@/types/form';
 
-export interface Quiz {
-	quiz: string;
+export type Quiz = {
+	title: string;
 	explain: string;
-	answer?: YesOrNo;
-	favorite?: YesOrNo;
-	category: Category['id'];
-}
-
-export interface QuizInfo extends Quiz {
-	id: string;
-	recentCorrect?: number;
-	tryCount: number;
-	wrongCount: number;
-	correctRate?: number;
-}
-
-export type QuizSelectFilter = Pick<QuizInfo, 'correctRate'> & {
-	category: number[];
-	isFirst?: UserAnswer;
-	favorite?: UserAnswer;
-	recentCorrect?: UserAnswer;
+	answer: boolean;
+	categoryId: Category['id'];
+	favorite: boolean;
 };
 
-export type QuizListItem = Omit<
-	QuizInfo,
-	'category' | 'answer' | 'explain' | 'recentCorrect'
->;
+export type QuizInfo = Quiz & {
+	id: string;
+	tryCount: number;
+	wrongCount: number;
+};
+
+// export type QuizSelectFilter = Pick<QuizInfo, 'correctRate'> & {
+// 	category: number[];
+// 	isFirst?: UserAnswer;
+// 	favorite?: UserAnswer;
+// 	recentCorrect?: UserAnswer;
+// };
+
+// export type QuizListItem = Omit<
+// 	QuizInfo,
+// 	'category' | 'answer' | 'explain' | 'recentCorrect'
+// >;
 
 export type QuizFormType = 'edit' | 'add';

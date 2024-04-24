@@ -12,7 +12,7 @@ export const URL_PATH = {
 	QUIZ_EDIT: '/quiz-edit/:id',
 	QUIZ_FILTER: '/quiz-filter',
 	CATEGORY: '/category',
-	LOGIN: '/login',
+	AUTH: '/auth',
 	MY_PAGE: '/my-page',
 };
 
