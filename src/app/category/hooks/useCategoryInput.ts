@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Category } from '../types';
 import { useCreateCategory } from '.';
+<<<<<<< HEAD
 import { useConfirm } from '@/components';
 import { useToast } from '@/components/toast';
 
@@ -12,6 +13,12 @@ export const useCategoryInput = (categoryList: Category[]) => {
 
 	const confirm = useConfirm();
 	const addToast = useToast();
+=======
+
+export const useCategoryInput = (categoryList: Category[]) => {
+	const [categoryInput, setCategoryInput] = useState('');
+	const createCategory = useCreateCategory();
+>>>>>>> 16f2951 (feat: firebase를 연동한다 (#7))
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
 		event

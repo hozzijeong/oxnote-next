@@ -1,6 +1,11 @@
 'use client';
 
+<<<<<<< HEAD
 import { useEffect, useState } from 'react';
+=======
+import { Suspense, useEffect, useState } from 'react';
+import styles from './root.module.scss';
+>>>>>>> 16f2951 (feat: firebase를 연동한다 (#7))
 import { onAuthStateChanged } from '@/lib/firebase';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -19,7 +24,6 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 			setUser(user);
 
 			setLoading(false);
-
 			if (user === null) {
 				router.replace(URL_PATH.AUTH);
 			}
