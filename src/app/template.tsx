@@ -6,6 +6,7 @@ import { onAuthStateChanged } from '@/lib/firebase';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { URL_PATH } from '@/constants/path';
+import { Navbar } from '@/components';
 
 const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 	const router = useRouter();
@@ -27,13 +28,7 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 		return <div>스피너...</div>;
 	}
 
-	return (
-		<div className={styles.container}>
-			<main className={styles.main}>
-				<Suspense fallback={<div>스피너...</div>}>{children}</Suspense>
-			</main>
-		</div>
-	);
+	return <div className={styles.container}>{children}</div>;
 };
 
 export default RootTemplate;

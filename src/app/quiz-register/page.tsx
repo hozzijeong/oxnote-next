@@ -87,77 +87,74 @@ const QuizRegisterPage = () => {
 	);
 
 	return (
-		<section>
-			<Header title='퀴즈 등록하기' backUrl={-1} />
-			<QuizForm>
-				<QuizForm.FormElement title='카테고리' htmlFor='category'>
-					<Selector
-						type='single'
-						options={categoryList.map((c) => c.name)}
-						placeholder='카테고리를 선택해주세요'
-						selected={categorySelected}
-						changeHandler={categoryChangeHandler}
-						isModal={isCategoryModal}
-					/>
-				</QuizForm.FormElement>
+		<QuizForm>
+			<QuizForm.FormElement title='카테고리' htmlFor='category'>
+				<Selector
+					type='single'
+					options={categoryList.map((c) => c.name)}
+					placeholder='카테고리를 선택해주세요'
+					selected={categorySelected}
+					changeHandler={categoryChangeHandler}
+					isModal={isCategoryModal}
+				/>
+			</QuizForm.FormElement>
 
-				<QuizForm.FormElement title='문제' htmlFor='quiz'>
-					<Input
-						id='quiz'
-						mode='text'
-						name='quiz'
-						placeholder='문제를 입력해주세요'
-						onChange={titleChangeHandler}
-						value={title}
-						required
-					/>
-				</QuizForm.FormElement>
+			<QuizForm.FormElement title='문제' htmlFor='quiz'>
+				<Input
+					id='quiz'
+					mode='text'
+					name='quiz'
+					placeholder='문제를 입력해주세요'
+					onChange={titleChangeHandler}
+					value={title}
+					required
+				/>
+			</QuizForm.FormElement>
 
-				<QuizForm.FormElement title='답' htmlFor='answer'>
-					<Selector
-						type='single'
-						options={Object.values(QUIZ_ANSWER)}
-						placeholder='정답을 입력해주세요'
-						selected={answerSelected}
-						changeHandler={answerChangeHandler}
-						isModal={isAnswerModal}
-					/>
-				</QuizForm.FormElement>
-				<QuizForm.FormElement title='해설' htmlFor='explain'>
-					<textarea
-						id='explain'
-						className={styles.explain}
-						name='explain'
-						placeholder='해설을 입력해주세요'
-						onChange={explainChangeHandler}
-						value={explain}
-						required
-					/>
-				</QuizForm.FormElement>
+			<QuizForm.FormElement title='답' htmlFor='answer'>
+				<Selector
+					type='single'
+					options={Object.values(QUIZ_ANSWER)}
+					placeholder='정답을 입력해주세요'
+					selected={answerSelected}
+					changeHandler={answerChangeHandler}
+					isModal={isAnswerModal}
+				/>
+			</QuizForm.FormElement>
+			<QuizForm.FormElement title='해설' htmlFor='explain'>
+				<textarea
+					id='explain'
+					className={styles.explain}
+					name='explain'
+					placeholder='해설을 입력해주세요'
+					onChange={explainChangeHandler}
+					value={explain}
+					required
+				/>
+			</QuizForm.FormElement>
 
-				<QuizForm.FormElement title='즐겨찾기 등록' htmlFor='favorite'>
-					<Selector
-						type='single'
-						options={Object.values(FAVORITE_SELECT)}
-						placeholder='즐겨찾기를 등록하시겠습니까?'
-						selected={favoriteSelected}
-						changeHandler={favoriteChangeHandler}
-						isModal={isFavoriteModal}
-					/>
-				</QuizForm.FormElement>
+			<QuizForm.FormElement title='즐겨찾기 등록' htmlFor='favorite'>
+				<Selector
+					type='single'
+					options={Object.values(FAVORITE_SELECT)}
+					placeholder='즐겨찾기를 등록하시겠습니까?'
+					selected={favoriteSelected}
+					changeHandler={favoriteChangeHandler}
+					isModal={isFavoriteModal}
+				/>
+			</QuizForm.FormElement>
 
-				<div className={styles['button-container']}>
-					<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
-					<QuizForm.SubmitButton
-						type='button'
-						color='primary'
-						onClick={submitHandler}
-					>
-						제출하기
-					</QuizForm.SubmitButton>
-				</div>
-			</QuizForm>
-		</section>
+			<div className={styles['button-container']}>
+				<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
+				<QuizForm.SubmitButton
+					type='button'
+					color='primary'
+					onClick={submitHandler}
+				>
+					제출하기
+				</QuizForm.SubmitButton>
+			</div>
+		</QuizForm>
 	);
 };
 

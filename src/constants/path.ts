@@ -14,13 +14,13 @@ export const URL_PATH = {
 	CATEGORY: '/category',
 	AUTH: '/auth',
 	MY_PAGE: '/my-page',
-};
+} as const;
 
 export const NAVBAR_PAGE = [
 	URL_PATH.QUIZ_FILTER,
 	URL_PATH.CATEGORY,
 	URL_PATH.MY_PAGE,
-];
+] as const;
 
 export const FIRE_STORE = {
 	QUIZ: 'Quiz/data',
