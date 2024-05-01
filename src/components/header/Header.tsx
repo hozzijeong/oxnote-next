@@ -34,7 +34,7 @@ const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
 	return (
 		<header className={styles.container}>
 			{backUrlButton}
-			{title}
+			<h1 className={styles.title}>{title}</h1>
 			{menuComponent && (
 				<button
 					className={styles.menu}
