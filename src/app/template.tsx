@@ -29,7 +29,9 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 
 	return (
 		<div className={styles.container}>
-			<Suspense fallback={<div>스피너...</div>}>{children}</Suspense>
+			<main className={styles.main}>
+				<Suspense fallback={<div>스피너...</div>}>{children}</Suspense>
+			</main>
 		</div>
 	);
 };
