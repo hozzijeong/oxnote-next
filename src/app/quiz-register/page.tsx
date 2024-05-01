@@ -1,5 +1,5 @@
 'use client';
-import { Input, QuizForm, Selector } from '@/components';
+import { Header, Input, QuizForm, Selector } from '@/components';
 import styles from './quiz-register.module.scss';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
@@ -74,8 +74,6 @@ const QuizRegisterPage = () => {
 				answer: answerSelected[0] === 'O' ? true : false,
 				favorite: favoriteSelected[0] === 'O' ? true : false,
 			});
-
-			console.log(result);
 		},
 		[
 			answerSelected,
@@ -89,7 +87,8 @@ const QuizRegisterPage = () => {
 	);
 
 	return (
-		<main className={styles.main}>
+		<section>
+			<Header title='퀴즈 등록하기' backUrl={-1} />
 			<QuizForm>
 				<QuizForm.FormElement title='카테고리' htmlFor='category'>
 					<Selector
@@ -158,7 +157,7 @@ const QuizRegisterPage = () => {
 					</QuizForm.SubmitButton>
 				</div>
 			</QuizForm>
-		</main>
+		</section>
 	);
 };
 
