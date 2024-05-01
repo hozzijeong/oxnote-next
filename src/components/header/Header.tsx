@@ -2,11 +2,10 @@
 
 import { URL_PATH } from '@/constants/path';
 import { Back, MenuVertical } from '@/assets';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import useToggle from '@/hooks/useToggle';
 import Image from 'next/image';
 import styles from './header.module.scss';
-import { useRouter } from 'next/navigation';
 import { useBackRouter } from './hooks/useBackRouter';
 
 interface HeaderProps {
@@ -23,7 +22,7 @@ const Header = ({ title, backUrl, pathId, menuComponent }: HeaderProps) => {
 		return (
 			backUrl && (
 				<button className={styles['back-arrow']} onClick={backClickHandler}>
-					<Image src={Back} width={20} height={20} alt='뒤로 가기' />
+					<Image src={Back} width={24} height={24} alt='뒤로 가기' />
 				</button>
 			)
 		);
