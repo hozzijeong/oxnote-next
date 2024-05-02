@@ -7,7 +7,6 @@ import {
 	nextResponseWithResponseType,
 	requestWrapper,
 } from '@/lib/request-wrapper';
-import { NextResponse } from 'next/server';
 
 type BodyParams = {
 	uid: string;
@@ -43,7 +42,7 @@ export const POST = requestWrapper(
 				});
 			}
 
-			return nextResponseWithResponseType({
+			const successResponse = nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.OK,
@@ -55,6 +54,12 @@ export const POST = requestWrapper(
 					status: HTTP_STATUS_CODE.OK,
 				},
 			});
+
+			successResponse.cookies.set('user-id', body.uid, {
+				path: '/',
+			});
+
+			return successResponse;
 		} catch (e) {
 			return nextResponseWithResponseType({
 				body: {
