@@ -20,12 +20,12 @@ type Category = {
 export const GET = requestWrapper(
 	async (req) => {
 		try {
-			const { cookies } = req;
+			const { cookies, url } = req;
 
-			const cookie = cookies.get('user-id');
+			const userId = cookies.get('user-id');
 
 			const categorySnapshot = await getDocumentSnapshot(
-				`${cookie?.value}/category`,
+				`${userId?.value}/category`,
 				categoryConverter
 			);
 
@@ -84,10 +84,10 @@ export const POST = requestWrapper(
 		const { cookies } = req;
 		const params = (await req.json()) as Category;
 
-		const cookie = cookies.get('user-id');
+		const userId = cookies.get('user-id');
 
 		const currentCategoryList = await getDocumentSnapshot(
-			`${cookie?.value}/category`,
+			`${userId?.value}/category`,
 			categoryConverter
 		);
 
@@ -103,7 +103,7 @@ export const POST = requestWrapper(
 		}
 
 		await updateDocumentData({
-			path: `${cookie?.value}/category`,
+			path: `${userId?.value}/category`,
 			data: {
 				[params.id]: params.name,
 			},
