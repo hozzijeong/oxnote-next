@@ -15,6 +15,7 @@ import {
 	DocumentSnapshot,
 	DocumentReference,
 	FirestoreDataConverter,
+	QuerySnapshot,
 } from 'firebase/firestore';
 import { app } from '.';
 
@@ -30,15 +31,17 @@ type WithMergeOption = MutateDocumentPathParams & {
 const db = getFirestore(app);
 
 // NOTE: 중첩된 문서 경로에 컬렉션을 추가하는 메서드. data 값을 추가한다면, 생성과 동시에 새로운 값을 추가할 수 있다.
-export const createCollection = async ({
+export const createCollection = async <T>({
 	path,
 	key,
 	data,
+	converter,
 }: {
 	path: string;
 	key: string;
-	data: DocumentData;
-}): Promise<DocumentReference<DocumentData, DocumentData>> => {
+	data: T;
+	converter: FirestoreDataConverter<T>;
+}): Promise<DocumentReference<T, DocumentData>> => {
 	try {
 		const docRef = doc(db, path);
 
@@ -48,10 +51,9 @@ export const createCollection = async ({
 			throw new Error('존재하지 않는 경로입니다.');
 		}
 
-		const newCollectionRef = collection(docRef, key);
-		const createdData = await addDoc(newCollectionRef, data);
+		const newCollectionRef = collection(docRef, key).withConverter(converter);
 
-		return createdData;
+		return addDoc(newCollectionRef, data);
 	} catch (e) {
 		throw e;
 	}
@@ -96,25 +98,15 @@ export const getDocumentSnapshot = async <T>(
 	return await getDoc(doc(db, `${path}`).withConverter(converter));
 };
 
-type FilterParams = {
-	categoryId?: string;
-	favorite?: boolean;
-};
-
 // NOTE: queryConstraints(쿼리 제약)에 해당하는 여러 문서들을 반환하는 메서드
-export const getFilteredQuerySnapShot = async (
+export const getFilteredQuerySnapShot = async <T = DocumentData>(
 	path: string,
-	parameter: FilterParams
-) => {
+	converter: FirestoreDataConverter<T>,
+	filter: QueryFilterConstraint[] = []
+): Promise<QuerySnapshot<T, DocumentData>> => {
 	const docRef = collection(db, `${path}`);
 
-	const filter: QueryFilterConstraint[] = [];
-
-	if (parameter.categoryId) {
-		filter.push(where('categoryId', '==', parameter.categoryId));
-	}
-
-	const currentQuery = query(docRef, and(...filter));
+	const currentQuery = query(docRef, and(...filter)).withConverter(converter);
 
 	const querySnapshot = await getDocs(currentQuery);
 
