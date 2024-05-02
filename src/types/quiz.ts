@@ -1,6 +1,7 @@
 import { Category } from '@/app/category/types';
 
 export type Quiz = {
+	id: string;
 	title: string;
 	explain: string;
 	answer: boolean;
@@ -8,10 +9,13 @@ export type Quiz = {
 	favorite: boolean;
 };
 
-export type QuizInfo = Quiz & {
-	id: string;
+export type QuizRecord = {
 	tryCount: number;
 	wrongCount: number;
+};
+
+export type QuizInfo = Quiz & {
+	record: QuizRecord;
 };
 
 // export type QuizSelectFilter = Pick<QuizInfo, 'correctRate'> & {
