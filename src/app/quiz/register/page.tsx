@@ -1,5 +1,6 @@
 'use client';
-import { Header, Input, QuizForm, Selector } from '@/components';
+
+import { Input, QuizForm, Selector } from '@/components';
 import styles from './quiz-register.module.scss';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
@@ -9,8 +10,8 @@ import {
 	useCallback,
 	useState,
 } from 'react';
-import { useGetCategoryList } from '../category/hooks';
 import { useCreateQuiz } from './hooks/useCreateQuiz';
+import { useGetCategoryList } from '@/app/category/hooks';
 
 const { YES, NO } = UserAnswer;
 
