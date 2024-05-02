@@ -5,8 +5,8 @@ export const http = {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: 'Bearer Cj9N2LFrYvQdnLMnpO6WF2EGTdK2',
 			},
+			credentials: 'include',
 		});
 
 		return response.json();
@@ -18,6 +18,7 @@ export const http = {
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			credentials: 'include',
 			body: JSON.stringify(params),
 		});
 
