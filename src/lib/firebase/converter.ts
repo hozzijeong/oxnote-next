@@ -1,5 +1,5 @@
 import { Category } from '@/app/category/types';
-import { Quiz } from '@/types/quiz';
+import { Quiz, QuizInfo } from '@/types/quiz';
 import { User } from 'firebase/auth';
 import {
 	DocumentData,
@@ -8,24 +8,37 @@ import {
 	SnapshotOptions,
 } from 'firebase/firestore';
 
-export const quizConverter: FirestoreDataConverter<Quiz> = {
+export const quizConverter: FirestoreDataConverter<QuizInfo> = {
 	fromFirestore(
 		snapshot: QueryDocumentSnapshot,
 		options: SnapshotOptions
-	): Quiz & { id: string } {
+	): QuizInfo {
 		const data = snapshot.data(options);
+
 		return {
 			id: snapshot.id,
 			title: data.title,
 			explain: data.explain,
 			answer: data.answer,
-			categoryId: data.categoryId,
+			categoryId: data.category_id,
 			favorite: data.favorite,
+			record: {
+				tryCount: data.record.try_count,
+				wrongCount: data.record.wrong_count,
+			},
 		};
 	},
-	toFirestore(quiz: Quiz): DocumentData {
+	toFirestore(quiz: QuizInfo): DocumentData {
 		return {
-			...quiz,
+			title: quiz.title,
+			explain: quiz.explain,
+			answer: quiz.answer,
+			favorite: quiz.favorite,
+			category_id: quiz.categoryId,
+			record: {
+				try_count: quiz.record.tryCount,
+				wrong_count: quiz.record.wrongCount,
+			},
 		};
 	},
 };
