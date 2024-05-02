@@ -7,10 +7,10 @@
 
 export const URL_PATH = {
 	HOME: '/',
-	QUIZ_FORM: '/quiz-register',
-	QUIZ: '/quiz',
-	QUIZ_EDIT: '/quiz-edit/:id',
-	QUIZ_FILTER: '/quiz-filter',
+	QUIZ_FORM: '/quiz/register',
+	QUIZ: '/quiz/:id',
+	QUIZ_EDIT: '/quiz/:id/edit',
+	QUIZ_FILTER: '/quiz/filter',
 	CATEGORY: '/category',
 	AUTH: '/auth',
 	MY_PAGE: '/my-page',
