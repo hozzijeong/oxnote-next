@@ -1,5 +1,4 @@
 import { getDocumentSnapshot, updateDocumentData } from '@/lib/firebase';
-import { userConverter } from '@/lib/firebase/converter';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -7,6 +6,7 @@ import {
 	nextResponseWithResponseType,
 	requestWrapper,
 } from '@/lib/request-wrapper';
+import { userFireStoreConverter } from './converter';
 
 type BodyParams = {
 	uid: string;
@@ -20,7 +20,7 @@ export const POST = requestWrapper(
 		try {
 			const snapshot = await getDocumentSnapshot(
 				`${body.uid}/user`,
-				userConverter
+				userFireStoreConverter
 			);
 
 			if (!snapshot.exists()) {
