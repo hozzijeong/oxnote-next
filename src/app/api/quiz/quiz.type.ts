@@ -4,3 +4,25 @@ export type QuizFilterParams = {
 	isFirst?: boolean;
 	correctRate?: number;
 };
+
+export type Quiz = {
+	id: string;
+	category_id: string;
+	title: string;
+	explain: string;
+	answer: boolean;
+	favorite: boolean;
+	record: QuizRecord;
+};
+
+export type QuizRecord = {
+	try_count: number;
+	wrong_count: number;
+};
+
+export type QuizListResponse = {
+	id: string;
+	title: string;
+	favorite: boolean;
+	correctRate: number;
+};
