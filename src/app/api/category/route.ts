@@ -1,4 +1,3 @@
-import { categoryConverter } from '@/lib/firebase/converter';
 import {
 	getDocumentSnapshot,
 	updateDocumentData,
@@ -11,6 +10,7 @@ import {
 	requestWrapper,
 } from '@/lib/request-wrapper';
 import { REQUEST_CONFLICT } from '@/lib/request-wrapper/constants';
+import { categoryFireStoreConverter } from './converter';
 
 type Category = {
 	id: string;
@@ -26,7 +26,7 @@ export const GET = requestWrapper(
 
 			const categorySnapshot = await getDocumentSnapshot(
 				`${userId?.value}/category`,
-				categoryConverter
+				categoryFireStoreConverter
 			);
 
 			if (!categorySnapshot.exists()) {
@@ -88,7 +88,7 @@ export const POST = requestWrapper(
 
 		const currentCategoryList = await getDocumentSnapshot(
 			`${userId?.value}/category`,
-			categoryConverter
+			categoryFireStoreConverter
 		);
 
 		if (currentCategoryList.exists()) {
