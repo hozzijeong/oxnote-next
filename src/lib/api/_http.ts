@@ -1,7 +1,11 @@
+import type { FailureResponse, SuccessResponse } from '.';
+
 const BASE_URL = 'http://localhost:3000';
 
 export const http = {
-	get: async <T>(endPoint: RequestInfo | URL): Promise<T> => {
+	get: async <T>(
+		endPoint: RequestInfo | URL
+	): Promise<SuccessResponse<T> | FailureResponse> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -12,7 +16,10 @@ export const http = {
 		return response.json();
 	},
 
-	post: async <T, V>(endPoint: RequestInfo | URL, params: V): Promise<T> => {
+	post: async <T, V>(
+		endPoint: RequestInfo | URL,
+		params: V
+	): Promise<SuccessResponse<T> | FailureResponse> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			method: 'POST',
 			headers: {
