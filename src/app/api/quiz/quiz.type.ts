@@ -26,3 +26,8 @@ export type QuizListResponse = {
 	favorite: boolean;
 	correctRate: number;
 };
+
+export type QuizResponse = Omit<Quiz, 'record' | 'category_id'> & {
+	correctRate: number;
+	categoryId: string;
+};
