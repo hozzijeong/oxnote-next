@@ -18,16 +18,4 @@ export type QuizInfo = Quiz & {
 	record: QuizRecord;
 };
 
-// export type QuizSelectFilter = Pick<QuizInfo, 'correctRate'> & {
-// 	category: number[];
-// 	isFirst?: UserAnswer;
-// 	favorite?: UserAnswer;
-// 	recentCorrect?: UserAnswer;
-// };
-
-// export type QuizListItem = Omit<
-// 	QuizInfo,
-// 	'category' | 'answer' | 'explain' | 'recentCorrect'
-// >;
-
 export type QuizFormType = 'edit' | 'add';

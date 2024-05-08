@@ -11,13 +11,13 @@ import {
 	deleteDoc,
 	and,
 	QueryFilterConstraint,
-	where,
 	DocumentSnapshot,
 	DocumentReference,
-	FirestoreDataConverter,
 	QuerySnapshot,
+	FirestoreDataConverter,
 } from 'firebase/firestore';
 import { app } from '.';
+import { Converter } from './converter';
 
 type MutateDocumentPathParams = {
 	path: string;
@@ -31,7 +31,7 @@ type WithMergeOption = MutateDocumentPathParams & {
 const db = getFirestore(app);
 
 // NOTE: 중첩된 문서 경로에 컬렉션을 추가하는 메서드. data 값을 추가한다면, 생성과 동시에 새로운 값을 추가할 수 있다.
-export const createCollection = async <T>({
+export const createCollection = async <T, D extends DocumentData>({
 	path,
 	key,
 	data,
@@ -40,8 +40,8 @@ export const createCollection = async <T>({
 	path: string;
 	key: string;
 	data: T;
-	converter: FirestoreDataConverter<T>;
-}): Promise<DocumentReference<T, DocumentData>> => {
+	converter: FirestoreDataConverter<T, D>;
+}): Promise<DocumentReference<T, D>> => {
 	try {
 		const docRef = doc(db, path);
 
@@ -91,19 +91,19 @@ export const updateDocumentData = async ({
 };
 
 // NOTE: 특정 경로에 있는 문서를 읽는 메서드.
-export const getDocumentSnapshot = async <T>(
+export const getDocumentSnapshot = async <T, D extends DocumentData>(
 	path: string,
-	converter: FirestoreDataConverter<T>
+	converter: FirestoreDataConverter<T, D>
 ): Promise<DocumentSnapshot<T, DocumentData>> => {
 	return await getDoc(doc(db, `${path}`).withConverter(converter));
 };
 
 // NOTE: queryConstraints(쿼리 제약)에 해당하는 여러 문서들을 반환하는 메서드
-export const getFilteredQuerySnapShot = async <T = DocumentData>(
+export const getFilteredQuerySnapShot = async <T, D extends DocumentData>(
 	path: string,
-	converter: FirestoreDataConverter<T>,
+	converter: FirestoreDataConverter<T, D>,
 	filter: QueryFilterConstraint[] = []
-): Promise<QuerySnapshot<T, DocumentData>> => {
+): Promise<QuerySnapshot<T, D>> => {
 	const docRef = collection(db, `${path}`);
 
 	const currentQuery = query(docRef, and(...filter)).withConverter(converter);
