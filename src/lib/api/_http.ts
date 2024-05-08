@@ -1,6 +1,5 @@
+import { BASE_URL } from '@/constants/path';
 import type { FailureResponse, SuccessResponse } from '.';
-
-const BASE_URL = 'http://localhost:3000';
 
 export const http = {
 	get: async <T>(

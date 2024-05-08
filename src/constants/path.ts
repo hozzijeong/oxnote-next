@@ -26,3 +26,5 @@ export const FIRE_STORE = {
 	QUIZ: 'Quiz/data',
 	CATEGORY: 'Category',
 } as const;
+
+export const BASE_URL = 'http://localhost:3000';
