@@ -8,7 +8,7 @@ import {
 
 export type Converter<Client, FB extends DocumentData> = {
 	toFirestore(client: Client): FB;
-	fromFirestore(snapshot: QueryDocumentSnapshot): Client;
+	fromFirestore(snapshot: QueryDocumentSnapshot<FB>): Client;
 };
 type ConvertWrapper = <Client, FB extends DocumentData>(
 	props: Converter<Client, FB>
@@ -21,6 +21,6 @@ export const createConverterWrapper: ConvertWrapper = <
 	props: Converter<Client, FB>
 ): FirestoreDataConverter<Client, FB> => ({
 	toFirestore: (client: Client): FB => props.toFirestore(client),
-	fromFirestore: (snapshot: QueryDocumentSnapshot): Client =>
+	fromFirestore: (snapshot: QueryDocumentSnapshot<FB>): Client =>
 		props.fromFirestore(snapshot),
 });
