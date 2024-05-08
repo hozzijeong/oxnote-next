@@ -17,7 +17,6 @@ import {
 	FirestoreDataConverter,
 } from 'firebase/firestore';
 import { app } from '.';
-import { Converter } from './converter';
 
 type MutateDocumentPathParams = {
 	path: string;
