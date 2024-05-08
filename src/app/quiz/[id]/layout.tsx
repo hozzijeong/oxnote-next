@@ -1,9 +1,13 @@
 'use client';
 
-import { Header, Navbar } from '@/components';
+import { Header, Navbar, Pagination } from '@/components';
 import { Fragment } from 'react';
 import styles from './quiz-detail.module.scss';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import { getSessionStorage } from '@/lib/storage/session-storage';
+import { BASE_URL } from '@/constants/path';
+
+const quizIds = getSessionStorage<string[]>('quiz-id', []);
 
 const Layout = ({
 	children,
@@ -22,6 +26,11 @@ const Layout = ({
 					<button type='button'>삭제하기</button>
 				</Header.Menu>
 			</Header>
+			<Pagination
+				currentPosition={id}
+				positions={quizIds}
+				path={`${BASE_URL}/quiz`}
+			/>
 			<main className={styles.main}>{children}</main>
 			<Navbar />
 		</Fragment>
