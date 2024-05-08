@@ -100,6 +100,7 @@ export const POST = requestWrapper(
 
 		const quizObject = {
 			...params,
+			id: '',
 			record: {
 				tryCount: 0,
 				wrongCount: 0,
@@ -114,7 +115,6 @@ export const POST = requestWrapper(
 		});
 
 		const createdReference = data.withConverter(quizFireStoreConverter);
-
 		const snapshot = await getDoc(createdReference);
 
 		return nextResponseWithResponseType({
