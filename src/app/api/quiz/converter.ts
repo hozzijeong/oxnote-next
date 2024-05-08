@@ -21,7 +21,7 @@ const quizConverter: Converter<QuizInfo, Quiz> = {
 	},
 	toFirestore(client): Quiz {
 		return {
-			id: '',
+			id: client.id,
 			title: client.title,
 			explain: client.explain,
 			answer: client.answer,
