@@ -1,3 +1,5 @@
+'use client';
+
 import { Header, Navbar } from '@/components';
 import { Fragment } from 'react';
 import styles from './category.module.scss';

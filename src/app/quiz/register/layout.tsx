@@ -1,4 +1,6 @@
-import { Header, Navbar } from '@/components';
+'use client';
+
+import { Header } from '@/components';
 import { Fragment } from 'react';
 import styles from './quiz-register.module.scss';
 
