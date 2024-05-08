@@ -4,6 +4,7 @@ import { http } from '@/lib/api';
 import { useEffect, useState } from 'react';
 import QuizItem from '@/components/quiz-list-item/QuizListItem';
 import { QuizListResponse } from '@/app/api/quiz/quiz.type';
+import { setSessionStorage } from '@/lib/storage/session-storage';
 
 // NOTE: 자체 라우터를 만들면 안되는 이유 (https://github.com/vercel/next.js/discussions/54840)
 
@@ -20,6 +21,11 @@ const CategoryQuizList = ({ params: { id } }: { params: { id: string } }) => {
 			if (data.message === 'FAILURE') {
 				throw new Error(data.errors.message);
 			}
+
+			setSessionStorage<string[]>(
+				'quiz-id',
+				data.data.map((quiz) => quiz.id)
+			);
 
 			setQuizList(data.data);
 		};
