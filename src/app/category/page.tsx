@@ -1,7 +1,6 @@
 'use client';
 
 import styles from './category.module.scss';
-import { Header } from '@/components';
 import CategoryInput from './components/CategoryInput';
 import Link from 'next/link';
 import Image from 'next/image';

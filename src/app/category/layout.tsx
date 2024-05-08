@@ -5,7 +5,9 @@ import styles from './category.module.scss';
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<Fragment>
-			<Header title='카테고리' />
+			<Header>
+				<Header.Title title='카테고리' />
+			</Header>
 			<main className={styles.main}>{children}</main>
 			<Navbar />
 		</Fragment>
