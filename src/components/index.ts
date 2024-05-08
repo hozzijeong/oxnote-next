@@ -8,3 +8,4 @@ export { default as Spinner } from '@/components/spinner';
 export { default as Menu } from '@/components/menu';
 export { default as QuizForm } from '@/components/quiz-form/QuizForm';
 export { default as Selector } from '@/components/selector';
+export { default as Pagination } from '@/components/pagination/Pagination';
