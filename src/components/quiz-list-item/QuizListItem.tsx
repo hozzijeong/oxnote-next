@@ -4,14 +4,21 @@ import Link from 'next/link';
 import { URL_PATH } from '@/constants/path';
 import { FavoriteButton } from '..';
 import { generatePath } from '@/lib/utils';
+import { useUpdateQuizProperty } from '@/app/quiz/hooks';
 
-interface QuizItemProps {
+type Props = {
 	item: QuizListResponse;
-}
+};
 
-const QuizItem = ({ item }: QuizItemProps) => {
-	const favoriteClickHandler = () => console.log('데이터 업데이트');
+const QuizListItem = ({ item }: Props) => {
+	const updateFavorite = useUpdateQuizProperty({ quizId: item.id });
+
+	const favoriteClickHandler = async () => {
+		await updateFavorite({ favorite: !item.favorite });
+	};
+
 	const { id, title, correctRate, favorite } = item;
+
 	return (
 		<li className={styles.item} key={id}>
 			<Link
@@ -28,4 +35,4 @@ const QuizItem = ({ item }: QuizItemProps) => {
 	);
 };
 
-export default QuizItem;
+export default QuizListItem;
