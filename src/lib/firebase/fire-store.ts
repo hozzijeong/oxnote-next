@@ -15,6 +15,7 @@ import {
 	DocumentReference,
 	QuerySnapshot,
 	FirestoreDataConverter,
+	updateDoc,
 } from 'firebase/firestore';
 import { app } from '.';
 
@@ -110,6 +111,17 @@ export const getFilteredQuerySnapShot = async <T, D extends DocumentData>(
 	const querySnapshot = await getDocs(currentQuery);
 
 	return querySnapshot;
+};
+
+export const updateDocument = async <T extends { [x: string]: any }>(
+	path: string,
+	data: T
+) => {
+	const documentRef = doc(db, path);
+
+	await updateDoc(documentRef, {
+		...data,
+	});
 };
 
 // NOTE: Document를 제거하는 메서드
