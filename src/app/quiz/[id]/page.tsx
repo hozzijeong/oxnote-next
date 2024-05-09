@@ -3,13 +3,15 @@
 import useToggle from '@/hooks/useToggle';
 import styles from './quiz-detail.module.scss';
 import { FavoriteButton } from '@/components';
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { QuizInfo } from '@/types/quiz';
 import { http } from '@/lib/api';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import { useUpdateQuizProperty } from '../hooks';
 
 const QuizDetail = ({ params: { id } }: Params) => {
 	const { isOn: explainOn, toggle: explainHandler } = useToggle();
+	const updateQuiz = useUpdateQuizProperty({ quizId: id });
 
 	const [quiz, setQuiz] = useState<QuizInfo | null>(null);
 
@@ -27,18 +29,21 @@ const QuizDetail = ({ params: { id } }: Params) => {
 		getQuiz();
 	}, [id]);
 
-	const answerClickHandler: React.MouseEventHandler<HTMLDivElement> = (
-		event
-	) => {
-		if (!(event.target instanceof HTMLButtonElement)) return;
+	const submitAnswerHandler =
+		(answer: boolean): MouseEventHandler<HTMLButtonElement> =>
+		async (event) => {
+			event.preventDefault();
 
-		const { value } = event.target;
-
-		const answer = Boolean(Number(value));
-	};
+			const result = await http.post<{ result: boolean }, { answer: boolean }>(
+				`/api/quiz/${id}`,
+				{
+					answer,
+				}
+			);
+		};
 
 	const favoriteClickHandler = () => {
-		console.log('클릭');
+		updateQuiz({ favorite: !quiz?.favorite });
 	};
 
 	return (
@@ -58,22 +63,18 @@ const QuizDetail = ({ params: { id } }: Params) => {
 				{explainOn && <p className={styles['paragraph']}>{quiz?.explain}</p>}
 			</div>
 
-			<div
-				role='button'
-				className={styles['button-container']}
-				onClick={answerClickHandler}
-			>
+			<div className={styles['button-container']}>
 				<button
 					className={`${styles.button} ${styles['false-bg']}`}
 					type='button'
-					value={0}
+					onClick={submitAnswerHandler(false)}
 				>
 					X
 				</button>
 				<button
 					className={`${styles.button} ${styles['true-bg']}`}
 					type='button'
-					value={1}
+					onClick={submitAnswerHandler(true)}
 				>
 					O
 				</button>
