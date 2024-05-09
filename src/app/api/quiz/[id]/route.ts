@@ -83,37 +83,68 @@ export const GET = requestWrapper(
 	}
 );
 
-// 데이터 업데이트를 Patch를 해야겠다
-
-const POST = requestWrapper(
+// NOTE: 문제 정답에 대한 처리르 하는 메서드
+export const POST = requestWrapper(
 	async (req) => {
-		const { cookies } = req;
+		const { cookies, url } = req;
 
-		const cookie = cookies.get('user-id');
+		const userId = cookies.get('user-id');
 
-		const PATH = `${cookie?.value}/quiz`;
+		const quizId = url.split('/').pop();
 
-		const params = await req.json();
+		if (!quizId)
+			return nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.FAILURE,
+					code: null,
+					data: null,
+					errors: {
+						code: HTTP_STATUS_CODE.NOT_FOUND,
+						message: '잘못된 경로입니다.',
+					},
+				},
+				options: {
+					status: HTTP_STATUS_CODE.NOT_FOUND,
+				},
+			});
 
-		// const data = await createCollection({
-		// 	path: PATH,
-		// 	key: 'data',
-		// 	data: params,
-		// });
+		const quizSnapshot = await getDocumentSnapshot(
+			`${userId?.value}/quiz/data/${quizId}`,
+			quizFireStoreConverter
+		);
 
-		// const createdReference = data.withConverter(quizConverter);
+		const data = await req.json();
 
-		// const snapshot = await getDoc(createdReference);
+		const quizInfo = quizSnapshot.data();
+
+		if (!quizInfo) {
+			return nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.FAILURE,
+					code: null,
+					data: null,
+					errors: {
+						code: HTTP_STATUS_CODE.NOT_FOUND,
+						message: '퀴즈가 존재하지 않습니다',
+					},
+				},
+				options: {
+					status: HTTP_STATUS_CODE.OK,
+				},
+			});
+		}
+
+		const { answer } = data;
 
 		return nextResponseWithResponseType({
 			body: {
 				message: RESPONSE_MESSAGE.SUCCESS,
-				code: HTTP_STATUS_CODE.CREATED,
-				data: null,
+				code: HTTP_STATUS_CODE.OK,
+				data: { result: answer === quizInfo.answer },
 				errors: null,
 			},
 			options: {
-				status: HTTP_STATUS_CODE.CREATED,
+				status: HTTP_STATUS_CODE.OK,
 			},
 		});
 	},
