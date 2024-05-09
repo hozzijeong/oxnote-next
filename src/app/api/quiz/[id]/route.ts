@@ -1,4 +1,4 @@
-import { getDocumentSnapshot } from '@/lib/firebase';
+import { getDocumentSnapshot, updateDocument } from '@/lib/firebase';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -124,5 +124,51 @@ const POST = requestWrapper(
 );
 
 const PUT = () => {};
-const PATCH = () => {};
+
+export const PATCH = requestWrapper(
+	async (req) => {
+		const { cookies, url } = req;
+
+		const userId = cookies.get('user-id');
+
+		const quizId = url.split('/').pop();
+
+		const body = await req.json();
+
+		if (!quizId) {
+			console.log('invalidPath');
+			return nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.FAILURE,
+					code: null,
+					data: null,
+					errors: {
+						code: HTTP_STATUS_CODE.NOT_FOUND,
+						message: '잘못된 경로입니다.',
+					},
+				},
+				options: {
+					status: HTTP_STATUS_CODE.NOT_FOUND,
+				},
+			});
+		}
+
+		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, body);
+
+		return nextResponseWithResponseType({
+			body: {
+				message: RESPONSE_MESSAGE.SUCCESS,
+				code: HTTP_STATUS_CODE.OK,
+				data: null,
+				errors: null,
+			},
+			options: {
+				status: HTTP_STATUS_CODE.OK,
+			},
+		});
+	},
+	{
+		methodWhiteList: [HTTP_METHOD.PATCH],
+	}
+);
 const DELETE = () => {};
