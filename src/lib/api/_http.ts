@@ -49,4 +49,19 @@ export const http = {
 
 		return response.json();
 	},
+
+	delete: async <T>(
+		endPoint: RequestInfo | URL
+	): Promise<SuccessResponse<T> | FailureResponse> => {
+		const response = await fetch(`${BASE_URL}${endPoint}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+			},
+			credentials: 'include',
+		});
+
+		return response.json();
+	},
 };

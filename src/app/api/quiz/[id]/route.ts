@@ -1,4 +1,8 @@
-import { getDocumentSnapshot, updateDocument } from '@/lib/firebase';
+import {
+	deleteDocument,
+	getDocumentSnapshot,
+	updateDocument,
+} from '@/lib/firebase';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -9,6 +13,8 @@ import {
 import { quizFireStoreConverter } from '../converter';
 import { QuizResponse } from '../quiz.type';
 import { calculateCorrectRate } from '@/lib/utils';
+
+// TODO: Custom Error 생성해서, 문제발생시 error를 throw하고, 한번에 처리하기.
 
 export const GET = requestWrapper(
 	async (req) => {
@@ -202,4 +208,45 @@ export const PATCH = requestWrapper(
 		methodWhiteList: [HTTP_METHOD.PATCH],
 	}
 );
-const DELETE = () => {};
+export const DELETE = requestWrapper(
+	async (req) => {
+		const { cookies, url } = req;
+
+		const userId = cookies.get('user-id');
+
+		const quizId = url.split('/').pop();
+
+		if (!quizId)
+			return nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.FAILURE,
+					code: null,
+					data: null,
+					errors: {
+						code: HTTP_STATUS_CODE.NOT_FOUND,
+						message: '잘못된 경로입니다.',
+					},
+				},
+				options: {
+					status: HTTP_STATUS_CODE.NOT_FOUND,
+				},
+			});
+
+		await deleteDocument(`${userId?.value}/quiz/data/${quizId}`);
+
+		return nextResponseWithResponseType({
+			body: {
+				message: RESPONSE_MESSAGE.SUCCESS,
+				code: HTTP_STATUS_CODE.OK,
+				data: { quizId },
+				errors: null,
+			},
+			options: {
+				status: HTTP_STATUS_CODE.OK,
+			},
+		});
+	},
+	{
+		methodWhiteList: [HTTP_METHOD.DELETE],
+	}
+);
