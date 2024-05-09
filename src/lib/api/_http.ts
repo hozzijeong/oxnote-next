@@ -8,6 +8,7 @@ export const http = {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			headers: {
 				'Content-Type': 'application/json',
+				Accept: 'application/json',
 			},
 			credentials: 'include',
 		});
@@ -23,6 +24,24 @@ export const http = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				Accept: 'application/json',
+			},
+			credentials: 'include',
+			body: JSON.stringify(params),
+		});
+
+		return response.json();
+	},
+
+	patch: async <T, V>(
+		endPoint: RequestInfo | URL,
+		params: V
+	): Promise<SuccessResponse<T> | FailureResponse> => {
+		const response = await fetch(`${BASE_URL}${endPoint}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
 			},
 			credentials: 'include',
 			body: JSON.stringify(params),
