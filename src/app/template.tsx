@@ -19,6 +19,7 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 			setUser(user);
 
 			setLoading(false);
+
 			if (user === null) {
 				router.replace(URL_PATH.AUTH);
 			}
@@ -26,7 +27,7 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 	}, [router]);
 
 	if (loading) {
-		return <div>스피너...</div>;
+		return <Spinner />;
 	}
 
 	return (
