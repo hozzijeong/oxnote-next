@@ -4,16 +4,13 @@ import styles from './auth.module.scss';
 import { signInWithGoogle } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { URL_PATH } from '@/constants/path';
-import { http } from '@/lib/api';
-
-type BodyParams = {
-	uid: string;
-	email: string | null;
-	userName: string | null;
-};
+import { useLogin } from './hooks';
 
 const Auth = () => {
 	const router = useRouter();
+	const { login } = useLogin({
+		onSuccess: () => router.push(URL_PATH.QUIZ_FORM),
+	});
 
 	const googleLoginHandler: React.MouseEventHandler<
 		HTMLButtonElement
@@ -22,13 +19,7 @@ const Auth = () => {
 			const result = await signInWithGoogle();
 			const { uid, displayName, email } = result.user;
 
-			await http.post<void, BodyParams>('/api/auth', {
-				uid,
-				email,
-				userName: displayName,
-			});
-
-			router.push(URL_PATH.QUIZ_FORM);
+			login({ uid, email, userName: displayName });
 		} catch (e) {
 			console.error(e);
 		}
