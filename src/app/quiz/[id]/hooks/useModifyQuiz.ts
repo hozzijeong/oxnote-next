@@ -3,37 +3,43 @@ import { useSessionStorage } from '@/hooks';
 import { http } from '@/lib/api';
 import { generatePath } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import useSWRMutation from 'swr/mutation';
 
 const useModifyQuiz = (id: string) => {
 	const router = useRouter();
 	const [quizIds, updateQuizIds] = useSessionStorage<string[]>('quiz-id', []);
 
+	const { trigger } = useSWRMutation<{ quizId: string }>(
+		`/api/quiz/${id}`,
+		http.delete,
+		{
+			onSuccess: ({ quizId }) => {
+				updateQuizIds(quizIds.filter((id) => id !== quizId));
+				const quizIndex = quizIds.findIndex((id) => id === quizId);
+
+				if (quizIndex === -1) {
+					router.replace(URL_PATH.HOME);
+				}
+
+				if (quizIds.length === 1) {
+					router.back();
+				}
+
+				router.replace(
+					generatePath(URL_PATH.QUIZ, {
+						id: quizIds[quizIndex === 0 ? 0 : quizIndex - 1],
+					})
+				);
+			},
+		}
+	);
+
 	const deleteHandler: React.MouseEventHandler<
 		HTMLButtonElement
 	> = async () => {
-		const { message, data } = await http.delete<{ quizId: string }>(
-			`/api/quiz/${id}`
-		);
+		const result = await trigger();
 
-		if (message === 'FAILURE') return;
-
-		const { quizId } = data;
-		updateQuizIds(quizIds.filter((id) => id !== quizId));
-		const quizIndex = quizIds.findIndex((id) => id === quizId);
-
-		if (quizIndex === -1) {
-			router.replace(URL_PATH.HOME);
-		}
-
-		if (quizIds.length === 1) {
-			router.back();
-		}
-
-		router.replace(
-			generatePath(URL_PATH.QUIZ, {
-				id: quizIds[quizIndex === 0 ? 0 : quizIndex - 1],
-			})
-		);
+		return result;
 	};
 
 	const modifyHandler: React.MouseEventHandler<HTMLButtonElement> = () => {

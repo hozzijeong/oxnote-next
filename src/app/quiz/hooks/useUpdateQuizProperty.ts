@@ -1,27 +1,28 @@
 import { http } from '@/lib/api';
-import { Quiz, QuizInfo } from '@/types';
+import { QuizInfo } from '@/types';
 import { useCallback } from 'react';
-
-type Props = {
-	quizId: string;
-};
+import { Key } from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 type UpdateAbleQuizProperty = Pick<QuizInfo, 'favorite' | 'record'>;
 
 type UpdateParameter = Partial<UpdateAbleQuizProperty>;
 
-export const useUpdateQuizProperty = ({ quizId }: Props) => {
+export const useUpdateQuizProperty = (id: string) => {
+	const { trigger, isMutating, reset } = useSWRMutation<
+		void,
+		Error,
+		Key,
+		UpdateParameter
+	>(`/api/quiz/${id}`, http.patch);
+
 	const updateQuiz = useCallback(
 		async (updateProperty: UpdateParameter) => {
-			const result = await http.patch<void, UpdateParameter>(
-				`/api/quiz/${quizId}`,
-				updateProperty
-			);
-
+			const result = await trigger(updateProperty);
 			return result;
 		},
-		[quizId]
+		[trigger]
 	);
 
-	return updateQuiz;
+	return { updateQuiz, isMutating, reset };
 };

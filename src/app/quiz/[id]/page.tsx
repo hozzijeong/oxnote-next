@@ -3,13 +3,11 @@
 import useToggle from '@/hooks/useToggle';
 import styles from './quiz-detail.module.scss';
 import { FavoriteButton, Header, Navbar, Pagination } from '@/components';
-import { Fragment, MouseEventHandler } from 'react';
-import { http } from '@/lib/api';
+import { Fragment } from 'react';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { useUpdateQuizProperty } from '../hooks';
 import { useSessionStorage } from '@/hooks';
-import { useModifyQuiz } from './hooks';
-import useGetQuiz from './hooks/useGetQuiz';
+import { useGetQuiz, useModifyQuiz, useSubmitAnswer } from './hooks';
 
 const QuizDetailPage = ({ params: { id } }: Params) => {
 	const [quizIds] = useSessionStorage<string[]>('quiz-id', []);
@@ -17,20 +15,8 @@ const QuizDetailPage = ({ params: { id } }: Params) => {
 	const { data: quiz } = useGetQuiz(id);
 
 	const { isOn: explainOn, toggle: explainHandler } = useToggle();
-	const updateQuiz = useUpdateQuizProperty({ quizId: id });
-
-	const submitAnswerHandler =
-		(answer: boolean): MouseEventHandler<HTMLButtonElement> =>
-		async (event) => {
-			event.preventDefault();
-
-			const result = await http.post<{ result: boolean }, { answer: boolean }>(
-				`/api/quiz/${id}`,
-				{
-					answer,
-				}
-			);
-		};
+	const { updateQuiz } = useUpdateQuizProperty(id);
+	const { submitAnswerHandler } = useSubmitAnswer(id);
 
 	const favoriteClickHandler = () => {
 		updateQuiz({ favorite: !quiz.favorite });
