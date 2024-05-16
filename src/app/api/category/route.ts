@@ -82,7 +82,7 @@ export const GET = requestWrapper(
 export const POST = requestWrapper(
 	async (req) => {
 		const { cookies } = req;
-		const params = (await req.json()) as Category;
+		const { arg } = (await req.json()) as { arg: Category };
 
 		const userId = cookies.get('user-id');
 
@@ -92,7 +92,7 @@ export const POST = requestWrapper(
 		);
 
 		if (currentCategoryList.exists()) {
-			if (currentCategoryList.data().find((d) => d.name === params.name)) {
+			if (currentCategoryList.data().find((d) => d.name === arg.name)) {
 				return nextResponseWithResponseType({
 					body: REQUEST_CONFLICT,
 					options: {
@@ -105,7 +105,7 @@ export const POST = requestWrapper(
 		await updateDocumentData({
 			path: `${userId?.value}/category`,
 			data: {
-				[params.id]: params.name,
+				[arg.id]: arg.name,
 			},
 			merge: true,
 		});

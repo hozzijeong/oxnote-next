@@ -96,10 +96,10 @@ export const POST = requestWrapper(
 
 		const PATH = `${cookie?.value}/quiz`;
 
-		const params = await req.json();
+		const { arg } = await req.json();
 
 		const quizObject = {
-			...params,
+			...arg,
 			id: '',
 			record: {
 				tryCount: 0,

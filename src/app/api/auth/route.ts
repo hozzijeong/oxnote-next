@@ -16,17 +16,17 @@ type BodyParams = {
 
 export const POST = requestWrapper(
 	async (req) => {
-		const body = (await req.json()) as BodyParams;
+		const { arg } = (await req.json()) as { arg: BodyParams };
 		try {
 			const snapshot = await getDocumentSnapshot(
-				`${body.uid}/user`,
+				`${arg.uid}/user`,
 				userFireStoreConverter
 			);
 
 			if (!snapshot.exists()) {
-				await updateDocumentData({ path: `${body.uid}/user`, data: body });
-				await updateDocumentData({ path: `${body.uid}/category`, data: {} });
-				await updateDocumentData({ path: `${body.uid}/quiz`, data: {} });
+				await updateDocumentData({ path: `${arg.uid}/user`, data: arg });
+				await updateDocumentData({ path: `${arg.uid}/category`, data: {} });
+				await updateDocumentData({ path: `${arg.uid}/quiz`, data: {} });
 
 				return nextResponseWithResponseType({
 					body: {
@@ -55,7 +55,7 @@ export const POST = requestWrapper(
 				},
 			});
 
-			successResponse.cookies.set('user-id', body.uid, {
+			successResponse.cookies.set('user-id', arg.uid, {
 				path: '/',
 			});
 
