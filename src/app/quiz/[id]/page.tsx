@@ -3,8 +3,7 @@
 import useToggle from '@/hooks/useToggle';
 import styles from './quiz-detail.module.scss';
 import { FavoriteButton, Header, Navbar, Pagination } from '@/components';
-import { Fragment, MouseEventHandler, useEffect, useState } from 'react';
-import { QuizInfo } from '@/types/quiz';
+import { Fragment, MouseEventHandler } from 'react';
 import { http } from '@/lib/api';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { useUpdateQuizProperty } from '../hooks';
@@ -12,14 +11,13 @@ import { useSessionStorage } from '@/hooks';
 import { useModifyQuiz } from './hooks';
 import useGetQuiz from './hooks/useGetQuiz';
 
-const QuizDetail = ({ params: { id } }: Params) => {
+const QuizDetailPage = ({ params: { id } }: Params) => {
 	const [quizIds] = useSessionStorage<string[]>('quiz-id', []);
 	const { modifyHandler, deleteHandler } = useModifyQuiz(id);
+	const { data: quiz } = useGetQuiz(id);
 
 	const { isOn: explainOn, toggle: explainHandler } = useToggle();
 	const updateQuiz = useUpdateQuizProperty({ quizId: id });
-
-	const quiz = useGetQuiz(id);
 
 	const submitAnswerHandler =
 		(answer: boolean): MouseEventHandler<HTMLButtonElement> =>
@@ -35,7 +33,7 @@ const QuizDetail = ({ params: { id } }: Params) => {
 		};
 
 	const favoriteClickHandler = () => {
-		updateQuiz({ favorite: !quiz?.favorite });
+		updateQuiz({ favorite: !quiz.favorite });
 	};
 
 	return (
@@ -56,9 +54,9 @@ const QuizDetail = ({ params: { id } }: Params) => {
 			<main className={styles.main}>
 				<section className={styles['box']}>
 					<div className={styles['quiz-container']}>
-						<p className={styles['paragraph']}>{quiz?.title}</p>
+						<p className={styles['paragraph']}>{quiz.title}</p>
 						<FavoriteButton
-							isFavorite={Boolean(quiz?.favorite)}
+							isFavorite={Boolean(quiz.favorite)}
 							onClick={favoriteClickHandler}
 						/>
 					</div>
@@ -67,9 +65,7 @@ const QuizDetail = ({ params: { id } }: Params) => {
 						<button type='button' onClick={explainHandler}>{`해설 ${
 							explainOn ? '닫기' : '보기'
 						}`}</button>
-						{explainOn && (
-							<p className={styles['paragraph']}>{quiz?.explain}</p>
-						)}
+						{explainOn && <p className={styles['paragraph']}>{quiz.explain}</p>}
 					</div>
 
 					<div className={styles['button-container']}>
@@ -95,4 +91,4 @@ const QuizDetail = ({ params: { id } }: Params) => {
 	);
 };
 
-export default QuizDetail;
+export default QuizDetailPage;
