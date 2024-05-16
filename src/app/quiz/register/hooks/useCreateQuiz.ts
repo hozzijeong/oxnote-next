@@ -1,4 +1,6 @@
 import { http } from '@/lib/api';
+import { Key } from 'swr';
+import useSWRMutation from 'swr/mutation';
 
 type CreateQuizParams = {
 	categoryId: string;
@@ -9,14 +11,17 @@ type CreateQuizParams = {
 };
 
 export const useCreateQuiz = () => {
-	const createQuiz = async (params: CreateQuizParams) => {
-		const data = await http.post<
-			CreateQuizParams & { id: string },
-			CreateQuizParams
-		>('/api/quiz', params);
+	const { trigger, reset, isMutating } = useSWRMutation<
+		CreateQuizParams & { id: string },
+		Error,
+		Key,
+		CreateQuizParams
+	>('/api/quiz', http.post);
 
-		return data;
+	const createQuiz = async (params: CreateQuizParams) => {
+		const result = await trigger(params);
+		return result;
 	};
 
-	return createQuiz;
+	return { createQuiz, reset, isMutating };
 };

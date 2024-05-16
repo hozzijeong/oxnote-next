@@ -26,8 +26,8 @@ const QUIZ_ANSWER: YesOrNoOption = {
 };
 
 const QuizRegisterPage = () => {
-	const categoryList = useGetCategoryList();
-	const createQuiz = useCreateQuiz();
+	const { data: categoryList } = useGetCategoryList();
+	const { createQuiz } = useCreateQuiz();
 
 	const {
 		selected: categorySelected,
