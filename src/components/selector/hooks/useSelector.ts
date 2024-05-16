@@ -2,8 +2,8 @@ import type { DropDownType } from '@/components/dropdown/types';
 import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 import { useCallback, useState } from 'react';
 
-const useSelector = () => {
-	const [selected, setSelected] = useState<string[]>([]);
+const useSelector = (initialData?: string[]) => {
+	const [selected, setSelected] = useState<string[]>(initialData ?? []);
 
 	const changeHandler = useCallback((type: DropDownType, value: string) => {
 		setSelected((prev) => {
