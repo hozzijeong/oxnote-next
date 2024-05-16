@@ -4,7 +4,7 @@ import { Input, QuizForm, Selector } from '@/components';
 import styles from '../../register/quiz-register.module.scss';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
-import { ChangeEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 import { useGetCategoryList } from '@/app/category/hooks';
 import useGetQuiz from '../hooks/useGetQuiz';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -21,35 +21,37 @@ const QUIZ_ANSWER: YesOrNoOption = {
 	[NO]: 'X',
 };
 
-// TODO: 여기 상태를 설정하기 위해서는 서버 상태관리 라이브러리가 필요함
+// NOTE: useSelector에서 렌더링 하기 전에 initialData가 undefined가 할당된다고 하는데 잘 모르겠음;
 
 const QuizEditPage = ({ params: { id } }: { params: Params }) => {
-	const categoryList = useGetCategoryList();
+	const { data: categoryList } = useGetCategoryList();
+	const { data: quiz } = useGetQuiz(id);
 
-	const quiz = useGetQuiz(id);
-
-	console.log(quiz);
+	const selectedCategory =
+		categoryList.find((el) => el.id === quiz.categoryId) ?? null;
 
 	const {
 		selected: categorySelected,
 		changeHandler: categoryChangeHandler,
 		isModal: isCategoryModal,
-	} = useSelector(quiz?.categoryId ? [quiz.categoryId] : []);
+	} = useSelector({
+		initialData: selectedCategory ? [selectedCategory.name] : [],
+	});
 
 	const {
 		selected: answerSelected,
 		changeHandler: answerChangeHandler,
 		isModal: isAnswerModal,
-	} = useSelector(quiz !== null ? [QUIZ_ANSWER[`${quiz.answer}`]] : []);
+	} = useSelector({ initialData: [QUIZ_ANSWER[`${quiz.answer}`]] });
 
 	const {
 		selected: favoriteSelected,
 		changeHandler: favoriteChangeHandler,
 		isModal: isFavoriteModal,
-	} = useSelector(quiz !== null ? [QUIZ_ANSWER[`${quiz.favorite}`]] : []);
+	} = useSelector({ initialData: [QUIZ_ANSWER[`${quiz.favorite}`]] });
 
-	const [title, setTitle] = useState(quiz?.title);
-	const [explain, setExplain] = useState(quiz?.explain);
+	const [title, setTitle] = useState(quiz.title);
+	const [explain, setExplain] = useState(quiz.explain);
 
 	const titleChangeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
 		setTitle(e.currentTarget.value);
@@ -58,6 +60,12 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 	const explainChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
 		setExplain(e.currentTarget.value);
 	};
+
+	const isNotChanged =
+		title === quiz.title &&
+		explain === quiz.explain &&
+		answerSelected[0] === QUIZ_ANSWER[`${quiz.answer}`] &&
+		favoriteSelected[0] === QUIZ_ANSWER[`${quiz.favorite}`];
 
 	return (
 		<QuizForm>
@@ -69,6 +77,7 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 					selected={categorySelected}
 					changeHandler={categoryChangeHandler}
 					isModal={isCategoryModal}
+					disabled={true}
 				/>
 			</QuizForm.FormElement>
 
@@ -119,7 +128,11 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 
 			<div className={styles['button-container']}>
 				<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
-				<QuizForm.SubmitButton type='button' color='primary'>
+				<QuizForm.SubmitButton
+					type='button'
+					color='primary'
+					disabled={isNotChanged}
+				>
 					제출하기
 				</QuizForm.SubmitButton>
 			</div>
