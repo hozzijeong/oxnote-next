@@ -1,6 +1,8 @@
 import { BASE_URL } from '@/constants/path';
 import type { FailureResponse, SuccessResponse } from '.';
 
+type ResponseResult<T> = SuccessResponse<T> | FailureResponse;
+
 export const http = {
 	// TODO: Throw하는 Custom Error 만들기
 	get: async <T>(endPoint: RequestInfo | URL): Promise<T> => {
@@ -12,9 +14,7 @@ export const http = {
 			credentials: 'include',
 		});
 
-		const data = (await response.json()) as
-			| SuccessResponse<T>
-			| FailureResponse;
+		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {
 			throw new Error(`data.errors`);
@@ -23,10 +23,7 @@ export const http = {
 		return data.data;
 	},
 
-	post: async <T, V>(
-		endPoint: RequestInfo | URL,
-		params: V
-	): Promise<SuccessResponse<T> | FailureResponse> => {
+	post: async <T, V>(endPoint: RequestInfo | URL, params: V): Promise<T> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			method: 'POST',
 			headers: {
@@ -37,13 +34,16 @@ export const http = {
 			body: JSON.stringify(params),
 		});
 
-		return response.json();
+		const data = (await response.json()) as ResponseResult<T>;
+
+		if (data.message === 'FAILURE') {
+			throw new Error(`data.errors`);
+		}
+
+		return data.data;
 	},
 
-	patch: async <T, V>(
-		endPoint: RequestInfo | URL,
-		params: V
-	): Promise<SuccessResponse<T> | FailureResponse> => {
+	patch: async <T, V>(endPoint: RequestInfo | URL, params: V): Promise<T> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			method: 'PATCH',
 			headers: {
@@ -54,12 +54,16 @@ export const http = {
 			body: JSON.stringify(params),
 		});
 
-		return response.json();
+		const data = (await response.json()) as ResponseResult<T>;
+
+		if (data.message === 'FAILURE') {
+			throw new Error(`data.errors`);
+		}
+
+		return data.data;
 	},
 
-	delete: async <T>(
-		endPoint: RequestInfo | URL
-	): Promise<SuccessResponse<T> | FailureResponse> => {
+	delete: async <T>(endPoint: RequestInfo | URL): Promise<T> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			method: 'DELETE',
 			headers: {
@@ -69,6 +73,12 @@ export const http = {
 			credentials: 'include',
 		});
 
-		return response.json();
+		const data = (await response.json()) as ResponseResult<T>;
+
+		if (data.message === 'FAILURE') {
+			throw new Error(`data.errors`);
+		}
+
+		return data.data;
 	},
 };
