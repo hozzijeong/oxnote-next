@@ -10,7 +10,7 @@ import { getRandomColor } from '@/utils/colors';
 import { useGetCategoryList } from './hooks';
 
 const CategoryPage = () => {
-	const categoryList = useGetCategoryList();
+	const { data: categoryList } = useGetCategoryList();
 
 	return (
 		<section className={styles.container}>
