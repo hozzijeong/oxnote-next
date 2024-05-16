@@ -1,17 +1,18 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './root.module.scss';
 import { onAuthStateChanged } from '@/lib/firebase';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { URL_PATH } from '@/constants/path';
-import { Navbar } from '@/components';
+import { SWRConfig } from 'swr';
+import { Spinner } from '@/components';
 
 const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
-	const [user, setUser] = useState<User | null>(null);
+	const [_, setUser] = useState<User | null>(null);
 
 	useEffect(() => {
 		onAuthStateChanged((user) => {
@@ -28,7 +29,15 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 		return <div>스피너...</div>;
 	}
 
-	return <div className={styles.container}>{children}</div>;
+	return (
+		<SWRConfig
+			value={{
+				fallback: <Spinner />,
+			}}
+		>
+			<div className={styles.container}>{children}</div>;
+		</SWRConfig>
+	);
 };
 
 export default RootTemplate;
