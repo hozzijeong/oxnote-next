@@ -2,9 +2,8 @@ import { BASE_URL } from '@/constants/path';
 import type { FailureResponse, SuccessResponse } from '.';
 
 export const http = {
-	get: async <T>(
-		endPoint: RequestInfo | URL
-	): Promise<SuccessResponse<T> | FailureResponse> => {
+	// TODO: Throw하는 Custom Error 만들기
+	get: async <T>(endPoint: RequestInfo | URL): Promise<T> => {
 		const response = await fetch(`${BASE_URL}${endPoint}`, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -13,7 +12,15 @@ export const http = {
 			credentials: 'include',
 		});
 
-		return response.json();
+		const data = (await response.json()) as
+			| SuccessResponse<T>
+			| FailureResponse;
+
+		if (data.message === 'FAILURE') {
+			throw new Error(`data.errors`);
+		}
+
+		return data.data;
 	},
 
 	post: async <T, V>(
