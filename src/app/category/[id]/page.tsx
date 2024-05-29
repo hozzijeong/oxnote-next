@@ -6,7 +6,7 @@ import { useGetQuizList } from '@/app/quiz/hooks/useGetQuizList';
 
 // TODO: 해당 페이지 자체를 컴포넌트화 가능하다고 생각. [id]에 해당하는 값만 어떻게 처리하면 좋을 듯
 const CategoryQuizList = ({ params: { id } }: { params: { id: string } }) => {
-	const { data: quizList } = useGetQuizList({ categoryId: id });
+	const { data: quizList } = useGetQuizList({ 'category-id': id });
 
 	return (
 		<div>
