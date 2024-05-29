@@ -28,20 +28,26 @@ export const GET = requestWrapper(
 
 		for (const [key, value] of urlParams.entries()) {
 			if (key === 'category-id') {
-				filters.push(where('category_id', '==', value));
+				filters.push(where('category_id', 'in', [...value.split(',')]));
 			}
 
 			if (key === 'favorite') {
 				filters.push(where('favorite', '==', value === 'true' ? true : false));
 			}
 
-			// if(key === 'first'){
+			if (key === 'first') {
+				filters.push(where('record.try_count', '==', 0));
+			}
 
-			// }
+			if (key === 'correct-rate') {
+				filters.push(where('record.correct_rate', '<=', Number(value)));
+			}
 
-			// if(key === 'correct-rate'){
-
-			// }
+			if (key == 'recent-correct') {
+				filters.push(
+					where('record.recent_correct', '==', value === 'true' ? true : false)
+				);
+			}
 		}
 
 		const userId = cookies.get('user-id');
