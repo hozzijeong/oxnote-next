@@ -140,7 +140,23 @@ export const POST = requestWrapper(
 			});
 		}
 
-		const { answer } = data;
+		const {
+			arg: { answer },
+		} = data;
+
+		const result = answer === quizInfo.answer;
+
+		const {
+			record: { tryCount, wrongCount },
+		} = quizInfo;
+
+		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, {
+			record: {
+				try_count: tryCount + 1,
+				wrong_count: result ? wrongCount : wrongCount + 1,
+				recent_correct: result ? true : false,
+			},
+		});
 
 		return nextResponseWithResponseType({
 			body: {
@@ -190,7 +206,9 @@ export const PATCH = requestWrapper(
 			});
 		}
 
-		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, body);
+		const { arg } = body;
+
+		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, { ...arg });
 
 		return nextResponseWithResponseType({
 			body: {
@@ -208,6 +226,7 @@ export const PATCH = requestWrapper(
 		methodWhiteList: [HTTP_METHOD.PATCH],
 	}
 );
+
 export const DELETE = requestWrapper(
 	async (req) => {
 		const { cookies, url } = req;
