@@ -19,6 +19,7 @@ export type QuizRecord = {
 	try_count: number;
 	wrong_count: number;
 	recent_correct?: boolean;
+	correct_rate?: number;
 };
 
 export type QuizListResponse = {

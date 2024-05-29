@@ -150,11 +150,15 @@ export const POST = requestWrapper(
 			record: { tryCount, wrongCount },
 		} = quizInfo;
 
+		const updateCount = tryCount + 1;
+		const updateWrongCount = result ? wrongCount : wrongCount + 1;
+
 		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, {
 			record: {
-				try_count: tryCount + 1,
-				wrong_count: result ? wrongCount : wrongCount + 1,
+				try_count: updateCount,
+				wrong_count: updateWrongCount,
 				recent_correct: result ? true : false,
+				correct_rate: calculateCorrectRate(updateCount, updateWrongCount),
 			},
 		});
 
