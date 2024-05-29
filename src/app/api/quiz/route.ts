@@ -15,6 +15,7 @@ import { calculateCorrectRate } from '@/lib/utils';
 // NOTE: 여러가지의 퀴즈 정보를 얻는 방법으로 파라미터를 사용할 수 있지만, 이 방법 말고 POST를 통해서 얻어보려했음.
 // 하지만, 이미 파일 기반의 route에는 퀴즈 추가 형식으로 POST가 존재하기 때문에 GET으로 사용해볼 생각
 // 서버 컴포넌트 사용은 힘들것 같음 ㅠㅠ
+
 export const GET = requestWrapper(
 	async (req) => {
 		const { cookies, url } = req;
@@ -34,11 +35,11 @@ export const GET = requestWrapper(
 				filters.push(where('favorite', '==', value === 'true' ? true : false));
 			}
 
-			// if(key === 'isFirst'){
+			// if(key === 'first'){
 
 			// }
 
-			// if(key === 'correctRate'){
+			// if(key === 'correct-rate'){
 
 			// }
 		}

@@ -1,7 +1,6 @@
 'use client';
 
 import { URL_PATH } from '@/constants/path';
-import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 

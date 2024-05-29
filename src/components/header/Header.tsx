@@ -1,5 +1,3 @@
-'use client';
-
 import { URL_PATH } from '@/constants/path';
 import { Back, MenuVertical } from '@/assets';
 import { Fragment, useMemo } from 'react';

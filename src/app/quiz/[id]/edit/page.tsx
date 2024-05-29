@@ -4,7 +4,7 @@ import { Input, QuizForm, Selector } from '@/components';
 import styles from '../../register/quiz-register.module.scss';
 import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, useMemo, useState } from 'react';
 import { useGetCategoryList } from '@/app/category/hooks';
 import useGetQuiz from '../hooks/useGetQuiz';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -27,8 +27,10 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 	const { data: categoryList } = useGetCategoryList();
 	const { data: quiz } = useGetQuiz(id);
 
-	const selectedCategory =
-		categoryList.find((el) => el.id === quiz.categoryId) ?? null;
+	const selectedCategory = useMemo(
+		() => categoryList.find((el) => el.id === quiz.categoryId) ?? null,
+		[categoryList, quiz.categoryId]
+	);
 
 	const {
 		selected: categorySelected,
@@ -42,13 +44,21 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 		selected: answerSelected,
 		changeHandler: answerChangeHandler,
 		isModal: isAnswerModal,
-	} = useSelector({ initialData: [QUIZ_ANSWER[`${quiz.answer}`]] });
+	} = useSelector({
+		initialData: QUIZ_ANSWER[`${quiz.answer}`]
+			? [QUIZ_ANSWER[`${quiz.answer}`]]
+			: [],
+	});
 
 	const {
 		selected: favoriteSelected,
 		changeHandler: favoriteChangeHandler,
 		isModal: isFavoriteModal,
-	} = useSelector({ initialData: [QUIZ_ANSWER[`${quiz.favorite}`]] });
+	} = useSelector({
+		initialData: QUIZ_ANSWER[`${quiz.favorite}`]
+			? [QUIZ_ANSWER[`${quiz.favorite}`]]
+			: [],
+	});
 
 	const [title, setTitle] = useState(quiz.title);
 	const [explain, setExplain] = useState(quiz.explain);
