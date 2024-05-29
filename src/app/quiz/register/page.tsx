@@ -2,7 +2,6 @@
 
 import { Input, QuizForm, Selector } from '@/components';
 import styles from './quiz-register.module.scss';
-import { UserAnswer, YesOrNoOption } from '@/types/form';
 import useSelector from '@/components/selector/hooks/useSelector';
 import {
 	ChangeEventHandler,
@@ -12,18 +11,7 @@ import {
 } from 'react';
 import { useCreateQuiz } from './hooks/useCreateQuiz';
 import { useGetCategoryList } from '@/app/category/hooks';
-
-const { YES, NO } = UserAnswer;
-
-const FAVORITE_SELECT: YesOrNoOption = {
-	[YES]: '등록할게요',
-	[NO]: '등록하지 않을래요',
-};
-
-const QUIZ_ANSWER: YesOrNoOption = {
-	[YES]: 'O',
-	[NO]: 'X',
-};
+import { FAVORITE_SELECT, QUIZ_ANSWER } from '@/constants/form';
 
 const QuizRegisterPage = () => {
 	const { data: categoryList } = useGetCategoryList();

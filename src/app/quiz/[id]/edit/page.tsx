@@ -2,24 +2,12 @@
 
 import { Input, QuizForm, Selector } from '@/components';
 import styles from '../../register/quiz-register.module.scss';
-import { UserAnswer, YesOrNoOption } from '@/types/form';
+import { QUIZ_ANSWER, FAVORITE_SELECT } from '@/constants/form';
 import useSelector from '@/components/selector/hooks/useSelector';
 import { ChangeEventHandler, useMemo, useState } from 'react';
 import { useGetCategoryList } from '@/app/category/hooks';
 import useGetQuiz from '../hooks/useGetQuiz';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-
-const { YES, NO } = UserAnswer;
-
-const FAVORITE_SELECT: YesOrNoOption = {
-	[YES]: '등록할게요',
-	[NO]: '등록하지 않을래요',
-};
-
-const QUIZ_ANSWER: YesOrNoOption = {
-	[YES]: 'O',
-	[NO]: 'X',
-};
 
 // NOTE: useSelector에서 렌더링 하기 전에 initialData가 undefined가 할당된다고 하는데 잘 모르겠음;
 
