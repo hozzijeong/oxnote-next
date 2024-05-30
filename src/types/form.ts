@@ -1,7 +1,7 @@
 export enum UserAnswer {
-	NO,
-	YES,
-	NONE,
+	NO = 'false',
+	YES = 'true',
+	NONE = 'null',
 }
 
 export type UserAnswerOption = {

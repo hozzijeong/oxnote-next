@@ -1,9 +1,14 @@
 import type { DropDownType } from '@/components/dropdown/types';
-import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 import { useCallback, useState } from 'react';
+import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 
-const useSelector = () => {
-	const [selected, setSelected] = useState<string[]>([]);
+type Params = {
+	initialData?: string[];
+	belowWidth?: number;
+};
+
+const useSelector = ({ initialData = [], belowWidth = 520 }: Params = {}) => {
+	const [selected, setSelected] = useState<string[]>(initialData);
 
 	const changeHandler = useCallback((type: DropDownType, value: string) => {
 		setSelected((prev) => {
@@ -16,7 +21,7 @@ const useSelector = () => {
 		});
 	}, []);
 
-	const isModal = useIsBelowWidth(520);
+	const isModal = useIsBelowWidth(belowWidth);
 
 	return {
 		selected,

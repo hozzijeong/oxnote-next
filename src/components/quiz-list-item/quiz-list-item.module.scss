@@ -1,0 +1,38 @@
+@import '@/styles/mixins.module.scss';
+
+.item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 40px;
+	padding: 0 20px;
+	border-bottom: 1px solid #000;
+
+	@include fontMedium;
+
+	gap: 8px;
+
+	&:hover {
+		opacity: 0.9;
+		cursor: pointer;
+	}
+}
+
+.quiz-title {
+	width: 100%;
+	overflow: hidden;
+	line-height: 40px;
+
+	p {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-break: break-all;
+		white-space: nowrap;
+	}
+}
+
+.info-container {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}

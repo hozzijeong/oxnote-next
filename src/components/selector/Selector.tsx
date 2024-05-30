@@ -7,7 +7,6 @@ import {
 } from '../dropdown/hooks';
 import { DropDownType } from '../dropdown/types';
 import styles from './selector.module.scss';
-import useIsBelowWidth from '@/hooks/useIsBelowWidth';
 
 export type SelectorProps = {
 	type: DropDownType;
@@ -16,6 +15,7 @@ export type SelectorProps = {
 	selected: string[];
 	changeHandler: (type: DropDownType, value: string) => void;
 	isModal?: boolean;
+	disabled?: boolean;
 };
 
 const Selector = ({
@@ -25,6 +25,7 @@ const Selector = ({
 	selected,
 	changeHandler,
 	isModal,
+	disabled = false,
 }: SelectorProps) => {
 	const { toggles, dropdownRef } = useDropDownToggleController();
 
@@ -67,7 +68,7 @@ const Selector = ({
 			<DropDown.Trigger
 				className={selected.length === 0 ? styles['placeholder'] : ''}
 				title={selected.length === 0 ? placeholder : selected.join(', ')}
-				disabled={options.length === 0}
+				disabled={options.length === 0 || disabled}
 			/>
 			{isModal ? (
 				<DropDown.Modal

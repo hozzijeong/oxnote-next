@@ -6,14 +6,15 @@
 	min-width: #{$min-device-width};
 	max-width: #{$max-device-width};
 	margin: 0 auto;
-	padding: 30px 20px 80px;
+	padding: 0 20px 80px 20px;
+	min-height: 100vh;
 }
 
 .container {
 	position: relative;
 	width: 100%;
-	min-width: var(--min-device-width);
-	max-width: var(--max-device-width);
+	min-width: #{$min-device-width};
+	max-width: #{$max-device-width};
 	height: 100%;
 	margin: 0 auto;
 }

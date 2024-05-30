@@ -1,0 +1,77 @@
+@import '@/styles/variables.module.scss';
+@import '@/styles/mixins.module.scss';
+@import '../../root.module.scss';
+
+.box {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	min-height: 200px;
+	margin: 0 20px;
+	padding: 20px;
+	border: 1px solid #{$gray-60};
+	border-radius: 20px;
+	gap: 24px;
+}
+
+.quiz-container {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.paragraph {
+	@include fontLarge;
+
+	width: 100%;
+	overflow: hidden;
+	font-size: 2rem;
+	line-height: 2.4rem;
+	overflow-wrap: break-word;
+}
+
+.answer-container {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	margin-bottom: 40px;
+
+	button {
+		@include fontLarge;
+
+		width: 160px;
+		color: #{$sky};
+		text-align: left;
+	}
+
+	p {
+		@include fontMedium;
+	}
+}
+
+.button-container {
+	display: flex;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.button {
+	width: 100%;
+	height: #{$button-height};
+	height: 60px;
+	color: #{$white};
+
+	@include fontMedium;
+}
+
+.false-bg {
+	border-bottom-left-radius: 20px;
+	background-color: #{$accent};
+}
+
+.true-bg {
+	border-bottom-right-radius: 20px;
+	background-color: #{$correct};
+}
