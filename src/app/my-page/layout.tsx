@@ -2,7 +2,7 @@
 
 import { Header, Navbar } from '@/components';
 import { Fragment } from 'react';
-import styles from './quiz-list.module.scss';
+import styles from './my-page.module.scss';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
