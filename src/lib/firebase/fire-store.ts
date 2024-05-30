@@ -135,6 +135,17 @@ export const updateDocument = async <T extends { [x: string]: any }>(
 	}
 };
 
+export const updateDocument = async <T extends { [x: string]: any }>(
+	path: string,
+	data: T
+) => {
+	const documentRef = doc(db, path);
+
+	await updateDoc(documentRef, {
+		...data,
+	});
+};
+
 // NOTE: Document를 제거하는 메서드
 export const deleteDocument = async (path: string) => {
 	try {
