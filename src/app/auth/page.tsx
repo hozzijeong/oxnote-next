@@ -9,7 +9,7 @@ import { useLogin } from './hooks';
 const Auth = () => {
 	const router = useRouter();
 	const { login } = useLogin({
-		onSuccess: () => router.push(URL_PATH.QUIZ_FORM),
+		onSuccess: () => router.push(URL_PATH.CATEGORY),
 	});
 
 	const googleLoginHandler: React.MouseEventHandler<
