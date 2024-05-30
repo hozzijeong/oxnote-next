@@ -7,22 +7,24 @@
 
 export const URL_PATH = {
 	HOME: '/',
-	QUIZ_FORM: '/quiz-register',
-	QUIZ: '/quiz',
-	QUIZ_EDIT: '/quiz-edit/:id',
-	QUIZ_FILTER: '/quiz-filter',
+	QUIZ_FORM: '/quiz/register',
+	QUIZ: '/quiz/:id',
+	QUIZ_EDIT: '/quiz/:id/edit',
+	QUIZ_FILTER: '/quiz/filter',
 	CATEGORY: '/category',
 	AUTH: '/auth',
 	MY_PAGE: '/my-page',
-};
+} as const;
 
 export const NAVBAR_PAGE = [
 	URL_PATH.QUIZ_FILTER,
 	URL_PATH.CATEGORY,
 	URL_PATH.MY_PAGE,
-];
+] as const;
 
 export const FIRE_STORE = {
 	QUIZ: 'Quiz/data',
 	CATEGORY: 'Category',
 } as const;
+
+export const BASE_URL = 'http://localhost:3000';

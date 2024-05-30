@@ -1,4 +1,3 @@
-import { categoryConverter } from '@/lib/firebase/converter';
 import {
 	getDocumentSnapshot,
 	updateDocumentData,
@@ -11,6 +10,7 @@ import {
 	requestWrapper,
 } from '@/lib/request-wrapper';
 import { REQUEST_CONFLICT } from '@/lib/request-wrapper/constants';
+import { categoryFireStoreConverter } from './converter';
 
 type Category = {
 	id: string;
@@ -20,13 +20,13 @@ type Category = {
 export const GET = requestWrapper(
 	async (req) => {
 		try {
-			const { cookies } = req;
+			const { cookies, url } = req;
 
-			const cookie = cookies.get('user-id');
+			const userId = cookies.get('user-id');
 
 			const categorySnapshot = await getDocumentSnapshot(
-				`${cookie?.value}/category`,
-				categoryConverter
+				`${userId?.value}/category`,
+				categoryFireStoreConverter
 			);
 
 			if (!categorySnapshot.exists()) {
@@ -82,17 +82,17 @@ export const GET = requestWrapper(
 export const POST = requestWrapper(
 	async (req) => {
 		const { cookies } = req;
-		const params = (await req.json()) as Category;
+		const { arg } = (await req.json()) as { arg: Category };
 
-		const cookie = cookies.get('user-id');
+		const userId = cookies.get('user-id');
 
 		const currentCategoryList = await getDocumentSnapshot(
-			`${cookie?.value}/category`,
-			categoryConverter
+			`${userId?.value}/category`,
+			categoryFireStoreConverter
 		);
 
 		if (currentCategoryList.exists()) {
-			if (currentCategoryList.data().find((d) => d.name === params.name)) {
+			if (currentCategoryList.data().find((d) => d.name === arg.name)) {
 				return nextResponseWithResponseType({
 					body: REQUEST_CONFLICT,
 					options: {
@@ -103,9 +103,9 @@ export const POST = requestWrapper(
 		}
 
 		await updateDocumentData({
-			path: `${cookie?.value}/category`,
+			path: `${userId?.value}/category`,
 			data: {
-				[params.id]: params.name,
+				[arg.id]: arg.name,
 			},
 			merge: true,
 		});

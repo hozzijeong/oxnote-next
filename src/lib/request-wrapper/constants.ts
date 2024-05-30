@@ -16,6 +16,7 @@ export const HTTP_METHOD = {
 export const HTTP_STATUS_CODE = {
 	OK: 200,
 	CREATED: 201,
+	NO_CONTENT: 204,
 	BAD_REQUEST: 400,
 	UNAUTHORIZED: 401,
 	FORBIDDEN: 403,
@@ -84,4 +85,4 @@ export const REQUEST_CONFLICT: FailureType = {
 		code: HTTP_STATUS_CODE.CONFLICT,
 		message: '요청값이 중복 존재합니다',
 	},
-};
+} as const;

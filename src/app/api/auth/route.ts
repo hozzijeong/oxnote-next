@@ -1,5 +1,4 @@
 import { getDocumentSnapshot, updateDocumentData } from '@/lib/firebase';
-import { userConverter } from '@/lib/firebase/converter';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -7,7 +6,7 @@ import {
 	nextResponseWithResponseType,
 	requestWrapper,
 } from '@/lib/request-wrapper';
-import { NextResponse } from 'next/server';
+import { userFireStoreConverter } from './converter';
 
 type BodyParams = {
 	uid: string;
@@ -17,17 +16,17 @@ type BodyParams = {
 
 export const POST = requestWrapper(
 	async (req) => {
-		const body = (await req.json()) as BodyParams;
+		const { arg } = (await req.json()) as { arg: BodyParams };
 		try {
 			const snapshot = await getDocumentSnapshot(
-				`${body.uid}/user`,
-				userConverter
+				`${arg.uid}/user`,
+				userFireStoreConverter
 			);
 
 			if (!snapshot.exists()) {
-				await updateDocumentData({ path: `${body.uid}/user`, data: body });
-				await updateDocumentData({ path: `${body.uid}/category`, data: {} });
-				await updateDocumentData({ path: `${body.uid}/quiz`, data: {} });
+				await updateDocumentData({ path: `${arg.uid}/user`, data: arg });
+				await updateDocumentData({ path: `${arg.uid}/category`, data: {} });
+				await updateDocumentData({ path: `${arg.uid}/quiz`, data: {} });
 
 				return nextResponseWithResponseType({
 					body: {
@@ -43,7 +42,7 @@ export const POST = requestWrapper(
 				});
 			}
 
-			return nextResponseWithResponseType({
+			const successResponse = nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.OK,
@@ -55,6 +54,12 @@ export const POST = requestWrapper(
 					status: HTTP_STATUS_CODE.OK,
 				},
 			});
+
+			successResponse.cookies.set('user-id', arg.uid, {
+				path: '/',
+			});
+
+			return successResponse;
 		} catch (e) {
 			return nextResponseWithResponseType({
 				body: {

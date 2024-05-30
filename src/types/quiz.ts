@@ -1,6 +1,7 @@
 import { Category } from '@/app/category/types';
 
 export type Quiz = {
+	id: string;
 	title: string;
 	explain: string;
 	answer: boolean;
@@ -8,22 +9,15 @@ export type Quiz = {
 	favorite: boolean;
 };
 
-export type QuizInfo = Quiz & {
-	id: string;
+export type QuizRecord = {
 	tryCount: number;
 	wrongCount: number;
+	recentCorrect?: boolean;
+	correctRate?: number;
 };
 
-// export type QuizSelectFilter = Pick<QuizInfo, 'correctRate'> & {
-// 	category: number[];
-// 	isFirst?: UserAnswer;
-// 	favorite?: UserAnswer;
-// 	recentCorrect?: UserAnswer;
-// };
-
-// export type QuizListItem = Omit<
-// 	QuizInfo,
-// 	'category' | 'answer' | 'explain' | 'recentCorrect'
-// >;
+export type QuizInfo = Quiz & {
+	record: QuizRecord;
+};
 
 export type QuizFormType = 'edit' | 'add';
