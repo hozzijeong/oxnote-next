@@ -4,11 +4,10 @@ import useToggle from '@/hooks/useToggle';
 import styles from './quiz-detail.module.scss';
 import { FavoriteButton } from '@/components';
 import { useDeferredValue } from 'react';
-import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { useUpdateQuizProperty } from '../hooks';
 import { useGetQuiz, useSubmitAnswer } from './hooks';
 
-const QuizDetailPage = ({ params: { id } }: Params) => {
+const QuizDetailPage = ({ params: { id } }: { params: { id: string } }) => {
 	const { data: quiz } = useGetQuiz(id);
 	const deferredQuiz = useDeferredValue(quiz);
 

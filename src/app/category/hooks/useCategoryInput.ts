@@ -6,7 +6,7 @@ import { useCreateCategory } from '.';
 
 export const useCategoryInput = (categoryList: Category[]) => {
 	const [categoryInput, setCategoryInput] = useState('');
-	const createCategory = useCreateCategory();
+	const { createCategory } = useCreateCategory();
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
 		event
