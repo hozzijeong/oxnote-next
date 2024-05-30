@@ -22,7 +22,6 @@ const MOCK_QUIZ: Quiz = {
 	answer: true,
 	explain: '설명은 이렇게 됩니다',
 	favorite: true,
-	id: 'mock-id',
 	title: '테스트 들어갑니다잉?',
 	record: {
 		try_count: 0,

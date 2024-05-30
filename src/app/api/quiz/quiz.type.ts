@@ -6,7 +6,6 @@ export type QuizFilterParams = {
 };
 
 export type Quiz = {
-	id: string;
 	category_id: string;
 	title: string;
 	explain: string;

@@ -42,7 +42,6 @@ const quizConverter: Converter<QuizInfo, Quiz> = {
 				  };
 
 		return {
-			id: client.id,
 			title: client.title,
 			explain: client.explain,
 			answer: client.answer,
