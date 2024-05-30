@@ -180,8 +180,6 @@ export const POST = requestWrapper(
 	}
 );
 
-const PUT = () => {};
-
 export const PATCH = requestWrapper(
 	async (req) => {
 		const { cookies, url } = req;
@@ -193,7 +191,6 @@ export const PATCH = requestWrapper(
 		const body = await req.json();
 
 		if (!quizId) {
-			console.log('invalidPath');
 			return nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.FAILURE,
@@ -212,13 +209,17 @@ export const PATCH = requestWrapper(
 
 		const { arg } = body;
 
-		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, { ...arg });
+		await updateDocument(`${userId?.value}/quiz/data/${quizId}`, {
+			...arg,
+		});
 
 		return nextResponseWithResponseType({
 			body: {
 				message: RESPONSE_MESSAGE.SUCCESS,
 				code: HTTP_STATUS_CODE.OK,
-				data: null,
+				data: {
+					result: true,
+				},
 				errors: null,
 			},
 			options: {
