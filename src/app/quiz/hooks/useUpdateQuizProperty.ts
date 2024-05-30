@@ -11,7 +11,7 @@ type UpdateAbleQuizProperty =
 
 export const useUpdateQuizProperty = (id: string) => {
 	const { trigger, isMutating, reset } = useSWRMutation<
-		void,
+		{ result: boolean },
 		Error,
 		Key,
 		UpdateAbleQuizProperty

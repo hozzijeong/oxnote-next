@@ -4,28 +4,35 @@ import { Input, QuizForm, Selector } from '@/components';
 import styles from '../../register/quiz-register.module.scss';
 import { QUIZ_ANSWER, FAVORITE_SELECT } from '@/constants/form';
 import useSelector from '@/components/selector/hooks/useSelector';
-import { ChangeEventHandler, useMemo, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
 import { useGetCategoryList } from '@/app/category/hooks';
 import useGetQuiz from '../hooks/useGetQuiz';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+import { useRouter } from 'next/navigation';
+import { useUpdateQuizProperty } from '../../hooks';
 
 // NOTE: useSelector에서 렌더링 하기 전에 initialData가 undefined가 할당된다고 하는데 잘 모르겠음;
 
 const QuizEditPage = ({ params: { id } }: { params: Params }) => {
+	const router = useRouter();
+
 	const { data: categoryList } = useGetCategoryList();
 	const { data: quiz } = useGetQuiz(id);
+	const { updateQuiz } = useUpdateQuizProperty(id);
 
-	const selectedCategory = useMemo(
-		() => categoryList.find((el) => el.id === quiz.categoryId) ?? null,
-		[categoryList, quiz.categoryId]
-	);
+	const selectedCategory =
+		categoryList.find((el) => el.id === quiz.categoryId) ?? null;
+
+	if (selectedCategory === null) {
+		throw new Error('카테고리가 존재하지 않습니다.');
+	}
 
 	const {
 		selected: categorySelected,
 		changeHandler: categoryChangeHandler,
 		isModal: isCategoryModal,
 	} = useSelector({
-		initialData: selectedCategory ? [selectedCategory.name] : [],
+		initialData: [selectedCategory.name],
 	});
 
 	const {
@@ -33,9 +40,7 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 		changeHandler: answerChangeHandler,
 		isModal: isAnswerModal,
 	} = useSelector({
-		initialData: QUIZ_ANSWER[`${quiz.answer}`]
-			? [QUIZ_ANSWER[`${quiz.answer}`]]
-			: [],
+		initialData: [QUIZ_ANSWER[`${quiz.answer}`]],
 	});
 
 	const {
@@ -43,9 +48,7 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 		changeHandler: favoriteChangeHandler,
 		isModal: isFavoriteModal,
 	} = useSelector({
-		initialData: QUIZ_ANSWER[`${quiz.favorite}`]
-			? [QUIZ_ANSWER[`${quiz.favorite}`]]
-			: [],
+		initialData: [FAVORITE_SELECT[`${quiz.favorite}`]],
 	});
 
 	const [title, setTitle] = useState(quiz.title);
@@ -59,11 +62,28 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 		setExplain(e.currentTarget.value);
 	};
 
+	const editHandler: MouseEventHandler<HTMLButtonElement> = async (e) => {
+		const { result } = await updateQuiz({
+			title,
+			favorite: favoriteSelected[0] === '등록할게요' ? true : false,
+			answer: answerSelected[0] === 'O' ? true : false,
+			explain,
+		});
+
+		if (result) {
+			router.back();
+		}
+	};
+
+	const cancelHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+		router.back();
+	};
+
 	const isNotChanged =
 		title === quiz.title &&
 		explain === quiz.explain &&
 		answerSelected[0] === QUIZ_ANSWER[`${quiz.answer}`] &&
-		favoriteSelected[0] === QUIZ_ANSWER[`${quiz.favorite}`];
+		favoriteSelected[0] === FAVORITE_SELECT[`${quiz.favorite}`];
 
 	return (
 		<QuizForm>
@@ -125,10 +145,13 @@ const QuizEditPage = ({ params: { id } }: { params: Params }) => {
 			</QuizForm.FormElement>
 
 			<div className={styles['button-container']}>
-				<QuizForm.SubmitButton type='reset'>취소하기</QuizForm.SubmitButton>
+				<QuizForm.SubmitButton type='reset' onClick={cancelHandler}>
+					취소하기
+				</QuizForm.SubmitButton>
 				<QuizForm.SubmitButton
 					type='button'
 					color='primary'
+					onClick={editHandler}
 					disabled={isNotChanged}
 				>
 					제출하기
