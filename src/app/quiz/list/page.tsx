@@ -2,15 +2,21 @@
 
 import { useSEarchQueryParams } from '@/hooks';
 import { useGetQuizList } from '../hooks/useGetQuizList';
+import { QuizItem } from '@/components';
 
 const QuizListPage = () => {
 	const { getWholeURLParams } = useSEarchQueryParams();
 
-	const { data } = useGetQuizList(getWholeURLParams());
+	const { data: quizList, mutate } = useGetQuizList(getWholeURLParams());
 
-	console.log(data, 'data??');
-
-	return <div>리스트입니다</div>;
+	return (
+		<div>
+			{quizList.length &&
+				quizList.map((quiz) => (
+					<QuizItem key={quiz.id} item={quiz} mutateItem={mutate} />
+				))}
+		</div>
+	);
 };
 
 export default QuizListPage;

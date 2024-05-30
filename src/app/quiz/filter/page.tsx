@@ -115,6 +115,11 @@ const QuizFilterPage = () => {
 		router.push(`/quiz/list?${query}`);
 	};
 
+	const isDisabled =
+		categorySelected.length === 0 ||
+		favoriteSelected.length === 0 ||
+		onlyFreshQuizSelected.length === 0;
+
 	return (
 		<QuizForm>
 			<QuizForm.FormElement title='카테고리' htmlFor='category'>
@@ -180,6 +185,7 @@ const QuizFilterPage = () => {
 				type='button'
 				color='primary'
 				onClick={submitHandler}
+				disabled={isDisabled}
 			>
 				적용하기
 			</QuizForm.SubmitButton>

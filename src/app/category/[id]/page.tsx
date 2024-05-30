@@ -1,5 +1,5 @@
 'use client';
-import QuizItem from '@/components/quiz-list-item/QuizListItem';
+import { QuizItem } from '@/components';
 import { useGetQuizList } from '@/app/quiz/hooks/useGetQuizList';
 
 // NOTE: 자체 라우터를 만들면 안되는 이유 (https://github.com/vercel/next.js/discussions/54840)
