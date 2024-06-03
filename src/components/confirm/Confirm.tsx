@@ -3,15 +3,15 @@
 import { useState, useEffect } from 'react';
 import styles from './confirm.module.scss';
 import { Button } from '..';
+import { ConfirmProps } from './confirm.type';
 
-type Props = {
-	title?: string;
-	message: string;
-	onConfirm: () => void;
-	onClose: () => void;
-};
-
-const Confirm = ({ title, message, onConfirm, onClose }: Props) => {
+const Confirm = ({
+	title,
+	message,
+	onConfirm,
+	onClose,
+	onCancel,
+}: ConfirmProps) => {
 	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
@@ -26,6 +26,7 @@ const Confirm = ({ title, message, onConfirm, onClose }: Props) => {
 
 	const handleCancel = () => {
 		setVisible(false);
+		onCancel();
 		setTimeout(onClose, 200);
 	};
 
