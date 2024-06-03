@@ -12,6 +12,7 @@
 		"emulators:start": "firebase emulators:start --only hosting"
 	},
 	"dependencies": {
+		"@toss/use-overlay": "^1.4.0",
 		"firebase": "^10.10.0",
 		"next": "14.1.2",
 		"react": "^18",
