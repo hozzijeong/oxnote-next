@@ -4,12 +4,14 @@ import { useState } from 'react';
 import { Category } from '../types';
 import { useCreateCategory } from '.';
 import { useConfirm } from '@/components';
+import { useToast } from '@/components/toast';
 
 export const useCategoryInput = (categoryList: Category[]) => {
 	const [categoryInput, setCategoryInput] = useState('');
 	const { createCategory } = useCreateCategory();
 
 	const confirm = useConfirm();
+	const addToast = useToast();
 
 	const inputChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
 		event
@@ -27,18 +29,19 @@ export const useCategoryInput = (categoryList: Category[]) => {
 			message: `${categoryInput}으로 입력하면 변경이 불가능합니다. 추가하시겠습니까?`,
 		});
 
-		if (result) {
-			if (categoryList.map((c) => c.name).includes(categoryInput)) {
-				alert(`${categoryInput}은 중복되는 카테고리입니다`);
+		if (!result) return;
 
-				return;
-			}
-			createCategory({
-				id: `${Date.now()}`,
-				name: categoryInput,
-			});
-			setCategoryInput('');
+		if (categoryList.map((c) => c.name).includes(categoryInput)) {
+			addToast({ message: `중복되는 카테고리입니다` });
+			return;
 		}
+
+		createCategory({
+			id: `${Date.now()}`,
+			name: categoryInput,
+		});
+
+		setCategoryInput('');
 	};
 
 	return { categoryInput, inputChangeHandler, addCategoryHandler };

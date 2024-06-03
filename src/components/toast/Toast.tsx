@@ -2,14 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import styles from './toast.module.scss';
+import { ToastProps } from './toast.type';
 
-type Props = {
-	message: string;
-	onClose: () => void;
-	duration?: number;
-};
-
-const Toast = ({ message, onClose, duration = 2000 }: Props) => {
+const Toast = ({ message, onClose, duration = 2000 }: ToastProps) => {
 	const [visible, setVisible] = useState(false);
 
 	useEffect(() => {
