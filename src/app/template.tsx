@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { URL_PATH } from '@/constants/path';
 import { SWRConfig } from 'swr';
 import { Spinner } from '@/components';
+import { OverlayProvider } from '@toss/use-overlay';
 
 const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 	const router = useRouter();
@@ -36,7 +37,9 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 				fallback: <Spinner />,
 			}}
 		>
-			<div className={styles.container}>{children}</div>;
+			<OverlayProvider>
+				<div className={styles.container}>{children}</div>
+			</OverlayProvider>
 		</SWRConfig>
 	);
 };

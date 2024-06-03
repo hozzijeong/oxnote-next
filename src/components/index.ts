@@ -10,3 +10,4 @@ export { default as QuizForm } from '@/components/quiz-form/QuizForm';
 export { default as Selector } from '@/components/selector';
 export { default as Pagination } from '@/components/pagination/Pagination';
 export { default as QuizItem } from '@/components/quiz-list-item/QuizListItem';
+export { default as Toast } from '@/components/toast/Toast';
