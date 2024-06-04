@@ -1,4 +1,5 @@
 import { http } from '@/lib/api';
+import { CustomError } from '@/lib/error';
 import { MouseEventHandler } from 'react';
 import { Key } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -6,7 +7,7 @@ import useSWRMutation from 'swr/mutation';
 const useSubmitAnswer = (id: string) => {
 	const { trigger, isMutating, reset } = useSWRMutation<
 		{ result: boolean },
-		Error,
+		CustomError,
 		Key,
 		{ answer: boolean }
 	>(`/api/quiz/${id}`, http.post);
