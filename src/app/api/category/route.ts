@@ -19,59 +19,42 @@ type Category = {
 
 export const GET = requestWrapper(
 	async (req) => {
-		try {
-			const { cookies, url } = req;
+		const { cookies, url } = req;
 
-			const userId = cookies.get('user-id');
+		const userId = cookies.get('user-id');
 
-			const categorySnapshot = await getDocumentSnapshot(
-				`${userId?.value}/category`,
-				categoryFireStoreConverter
-			);
+		const categorySnapshot = await getDocumentSnapshot(
+			`${userId?.value}/category`,
+			categoryFireStoreConverter
+		);
 
-			if (!categorySnapshot.exists()) {
-				return nextResponseWithResponseType({
-					body: {
-						message: RESPONSE_MESSAGE.SUCCESS,
-						code: HTTP_STATUS_CODE.OK,
-						data: [],
-						errors: null,
-					},
-					options: {
-						status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-					},
-				});
-			}
-
-			const data = categorySnapshot.data();
-
+		if (!categorySnapshot.exists()) {
 			return nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.OK,
-					data: data,
+					data: [],
 					errors: null,
 				},
 				options: {
-					status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+					status: HTTP_STATUS_CODE.OK,
 				},
-			});
-		} catch (error) {
-			return nextResponseWithResponseType({
-				body: {
-					message: RESPONSE_MESSAGE.FAILURE,
-					code: null,
-					data: null,
-					errors: {
-						code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-						message: `확인되지 않은 에러가 발생했습니다 : ${JSON.stringify(
-							error
-						)}`,
-					},
-				},
-				options: { status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR },
 			});
 		}
+
+		const data = categorySnapshot.data();
+
+		return nextResponseWithResponseType({
+			body: {
+				message: RESPONSE_MESSAGE.SUCCESS,
+				code: HTTP_STATUS_CODE.OK,
+				data: data,
+				errors: null,
+			},
+			options: {
+				status: HTTP_STATUS_CODE.OK,
+			},
+		});
 	},
 	{
 		methodWhiteList: [HTTP_METHOD.GET],
