@@ -12,7 +12,10 @@ const Auth = () => {
 	const router = useRouter();
 	const addToast = useToast();
 	const { login } = useLogin({
-		onSuccess: () => router.push(URL_PATH.CATEGORY),
+		onSuccess: () => {
+			router.replace(URL_PATH.CATEGORY);
+		},
+		onError: (err) => console.log(err),
 	});
 
 	const googleLoginHandler: React.MouseEventHandler<
