@@ -11,7 +11,6 @@ const MyPage = () => {
 		const auth = getAuth();
 		try {
 			await signOut(auth);
-			console.log('User logged out successfully');
 		} catch (error) {
 			addToast({ message: '로그아웃에 실패했습니다' });
 		}

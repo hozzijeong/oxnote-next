@@ -35,8 +35,6 @@ export const http = {
 			body: JSON.stringify(params),
 		});
 
-		console.log(response, 'response?');
-
 		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {

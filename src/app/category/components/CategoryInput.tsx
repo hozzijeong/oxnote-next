@@ -24,7 +24,7 @@ const CategoryInput = ({ category }: CategoryInputProps) => {
 			<Button
 				size='large'
 				className={styles['add-button']}
-				type='submit'
+				type='button'
 				onClick={addCategoryHandler}
 			>
 				추가하기
