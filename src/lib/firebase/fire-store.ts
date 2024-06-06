@@ -17,7 +17,7 @@ import {
 	FirestoreDataConverter,
 	updateDoc,
 } from 'firebase/firestore';
-import { app } from '.';
+import { firestore } from '.';
 
 type MutateDocumentPathParams = {
 	path: string;
@@ -27,8 +27,6 @@ type MutateDocumentPathParams = {
 type WithMergeOption = MutateDocumentPathParams & {
 	merge?: boolean;
 };
-
-const db = getFirestore(app);
 
 // NOTE: 중첩된 문서 경로에 컬렉션을 추가하는 메서드. data 값을 추가한다면, 생성과 동시에 새로운 값을 추가할 수 있다.
 export const createCollection = async <T, D extends DocumentData>({
@@ -43,7 +41,7 @@ export const createCollection = async <T, D extends DocumentData>({
 	converter: FirestoreDataConverter<T, D>;
 }): Promise<DocumentReference<T, D>> => {
 	try {
-		const docRef = doc(db, path);
+		const docRef = doc(firestore, path);
 
 		const docSnap = await getDoc(docRef);
 
@@ -67,7 +65,7 @@ export const createCollectionDocument = async ({
 	DocumentReference<DocumentData, DocumentData>
 > => {
 	try {
-		const docRef = await addDoc(collection(db, `${path}`), data);
+		const docRef = await addDoc(collection(firestore, `${path}`), data);
 
 		return docRef;
 	} catch (e) {
@@ -82,7 +80,7 @@ export const updateDocumentData = async ({
 	data,
 }: WithMergeOption): Promise<void> => {
 	try {
-		const documentRef = doc(db, path);
+		const documentRef = doc(firestore, path);
 		await setDoc(documentRef, data, { merge });
 	} catch (e) {
 		throw new Error('문서를 업데이트하는데 실패했습니다');
@@ -95,7 +93,7 @@ export const getDocumentSnapshot = async <T, D extends DocumentData>(
 	converter: FirestoreDataConverter<T, D>
 ): Promise<DocumentSnapshot<T, DocumentData>> => {
 	try {
-		return await getDoc(doc(db, `${path}`).withConverter(converter));
+		return await getDoc(doc(firestore, `${path}`).withConverter(converter));
 	} catch (e) {
 		throw new Error('문서를 불러오는데 실패했습니다');
 	}
@@ -108,7 +106,7 @@ export const getFilteredQuerySnapShot = async <T, D extends DocumentData>(
 	filter: QueryFilterConstraint[] = []
 ): Promise<QuerySnapshot<T, D>> => {
 	try {
-		const docRef = collection(db, `${path}`);
+		const docRef = collection(firestore, `${path}`);
 
 		const currentQuery = query(docRef, and(...filter)).withConverter(converter);
 
@@ -125,7 +123,7 @@ export const updateDocument = async <T extends { [x: string]: any }>(
 	data: T
 ) => {
 	try {
-		const documentRef = doc(db, path);
+		const documentRef = doc(firestore, path);
 
 		await updateDoc(documentRef, {
 			...data,
@@ -138,7 +136,7 @@ export const updateDocument = async <T extends { [x: string]: any }>(
 // NOTE: Document를 제거하는 메서드
 export const deleteDocument = async (path: string) => {
 	try {
-		const document = doc(db, `${path}`);
+		const document = doc(firestore, `${path}`);
 
 		await deleteDoc(document);
 	} catch (e) {
