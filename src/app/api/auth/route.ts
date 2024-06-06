@@ -7,6 +7,8 @@ import {
 	requestWrapper,
 } from '@/lib/request-wrapper';
 import { userFireStoreConverter } from './converter';
+import type { NextResponse } from 'next/server';
+import type { ResponseType } from '@/lib/request-wrapper/types';
 
 type BodyParams = {
 	uid: string;
@@ -23,12 +25,14 @@ export const POST = requestWrapper(
 			userFireStoreConverter
 		);
 
+		let successResponse: NextResponse<ResponseType<unknown>>;
+
 		if (!snapshot.exists()) {
 			await updateDocumentData({ path: `${arg.uid}/user`, data: arg });
 			await updateDocumentData({ path: `${arg.uid}/category`, data: {} });
 			await updateDocumentData({ path: `${arg.uid}/quiz`, data: {} });
 
-			return nextResponseWithResponseType({
+			successResponse = nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.CREATED,
@@ -40,26 +44,27 @@ export const POST = requestWrapper(
 					status: HTTP_STATUS_CODE.CREATED,
 				},
 			});
+		} else {
+			successResponse = nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.SUCCESS,
+					code: HTTP_STATUS_CODE.OK,
+					data: null,
+					errors: null,
+				},
+
+				options: {
+					status: HTTP_STATUS_CODE.OK,
+				},
+			});
 		}
-
-		const successResponse = nextResponseWithResponseType({
-			body: {
-				message: RESPONSE_MESSAGE.SUCCESS,
-				code: HTTP_STATUS_CODE.OK,
-				data: null,
-				errors: null,
-			},
-
-			options: {
-				status: HTTP_STATUS_CODE.OK,
-			},
-		});
 
 		successResponse.cookies.set('user-id', arg.uid, {
 			path: '/',
-			expires: 60 * 60 * 24 * 14 * 1000,
+			maxAge: 14 * 24 * 60 * 60,
 			httpOnly: true,
-			secure: false,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'lax',
 		});
 
 		return successResponse;
