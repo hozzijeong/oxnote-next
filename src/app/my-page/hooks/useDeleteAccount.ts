@@ -5,16 +5,23 @@ import { CustomError } from '@/lib/error';
 import { useToast } from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { URL_PATH } from '@/constants/path';
+import { deleteUser } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
-export const useLogout = () => {
+const { currentUser } = auth;
+
+export const useDeleteAccount = () => {
 	const addToast = useToast();
 	const router = useRouter();
 
 	const { trigger, isMutating, reset } = useSWRMutation<null, CustomError>(
-		'/api/auth/signout',
-		http.post,
+		'/api/auth',
+		http.delete,
 		{
-			onSuccess: () => {
+			onSuccess: async () => {
+				if (currentUser) {
+					await deleteUser(currentUser);
+				}
 				router.push(URL_PATH.AUTH);
 			},
 			onError: (err) => {
@@ -23,10 +30,10 @@ export const useLogout = () => {
 		}
 	);
 
-	const logout = useCallback(async () => {
+	const deleteAccount = useCallback(async () => {
 		const result = await trigger();
 		return result;
 	}, [trigger]);
 
-	return { logout, isMutating, reset };
+	return { deleteAccount, isMutating, reset };
 };

@@ -1,2 +1,2 @@
-export * from './useAccountDelete';
+export * from './useDeleteAccount';
 export * from './useLogout';

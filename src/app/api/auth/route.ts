@@ -1,4 +1,8 @@
-import { getDocumentSnapshot, updateDocumentData } from '@/lib/firebase';
+import {
+	deleteDocument,
+	getDocumentSnapshot,
+	updateDocumentData,
+} from '@/lib/firebase';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -9,6 +13,7 @@ import {
 import { userFireStoreConverter } from './converter';
 import type { NextResponse } from 'next/server';
 import type { ResponseType } from '@/lib/request-wrapper/types';
+import { RESPONSE_UNAUTHORIZED } from '@/lib/request-wrapper/constants';
 
 type BodyParams = {
 	uid: string;
@@ -71,5 +76,45 @@ export const POST = requestWrapper(
 	},
 	{
 		methodWhiteList: [HTTP_METHOD.POST],
+	}
+);
+
+export const DELETE = requestWrapper(
+	async (req) => {
+		const { cookies } = req;
+
+		const userId = cookies.get('user-id');
+
+		if (!userId) {
+			return nextResponseWithResponseType({
+				body: RESPONSE_UNAUTHORIZED,
+				options: {
+					status: HTTP_STATUS_CODE.UNAUTHORIZED,
+				},
+			});
+		}
+
+		await deleteDocument(`${userId.value}`);
+		await deleteDocument(`/user/${userId.value}`);
+
+		const successResponse = nextResponseWithResponseType({
+			body: {
+				message: RESPONSE_MESSAGE.SUCCESS,
+				code: HTTP_STATUS_CODE.OK,
+				data: null,
+				errors: null,
+			},
+
+			options: {
+				status: HTTP_STATUS_CODE.OK,
+			},
+		});
+
+		successResponse.cookies.delete('user-id');
+
+		return successResponse;
+	},
+	{
+		methodWhiteList: [HTTP_METHOD.DELETE],
 	}
 );
