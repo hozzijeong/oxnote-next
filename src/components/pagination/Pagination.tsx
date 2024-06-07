@@ -7,9 +7,15 @@ export type PaginationProps = {
 	currentPosition: string;
 	positions: string[];
 	path?: string;
+	replace?: boolean;
 };
 
-const Pagination = ({ currentPosition, positions, path }: PaginationProps) => {
+const Pagination = ({
+	currentPosition,
+	positions,
+	path,
+	replace = true,
+}: PaginationProps) => {
 	const { cursor } = useMoveCursor({
 		currentPosition,
 		positions,
@@ -26,12 +32,13 @@ const Pagination = ({ currentPosition, positions, path }: PaginationProps) => {
 						data-path={position}
 						className={styles[className]}
 						href={path ? `${path}/${position}` : position}
+						replace={replace}
 					>
 						{index + 1}
 					</Link>
 				);
 			}),
-		[cursor, path, positions]
+		[cursor, path, positions, replace]
 	);
 
 	return (
