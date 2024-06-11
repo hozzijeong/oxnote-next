@@ -28,6 +28,8 @@ type WithMergeOption = MutateDocumentPathParams & {
 	merge?: boolean;
 };
 
+// TODO: firebase-admin sdk로 유저 관리하기 (root collection 삭제 가능하도록)
+
 // NOTE: 중첩된 문서 경로에 컬렉션을 추가하는 메서드. data 값을 추가한다면, 생성과 동시에 새로운 값을 추가할 수 있다.
 export const createCollection = async <T, D extends DocumentData>({
 	path,
@@ -140,6 +142,7 @@ export const deleteDocument = async (path: string) => {
 
 		await deleteDoc(document);
 	} catch (e) {
+		console.log(e);
 		throw new Error('문서를 삭제하는데 실패했습니다');
 	}
 };
