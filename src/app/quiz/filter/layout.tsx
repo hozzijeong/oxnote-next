@@ -2,6 +2,7 @@
 
 import { Header } from '@/components';
 import { Fragment } from 'react';
+import styles from './filter.module.scss';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -9,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 			<Header>
 				<Header.Title title='문제 풀기' />
 			</Header>
-			{children}
+			<main className={styles.main}>{children}</main>
 		</Fragment>
 	);
 };

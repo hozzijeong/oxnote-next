@@ -2,6 +2,7 @@
 
 import { Header } from '@/components';
 import { Fragment } from 'react';
+import styles from './quiz-list.module.scss';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -10,7 +11,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 				<Header.BackButton backUrl={-1} />
 				<Header.Title title='문제 풀기' />
 			</Header>
-			{children}
+			<main className={styles.main}>{children}</main>
 		</Fragment>
 	);
 };

@@ -22,7 +22,7 @@ export default function RootLayout({
 		<html lang='ko'>
 			<body className={inter.className}>
 				<div className={styles.container}>
-					<main className={styles.main}>{children}</main>
+					{children}
 					<Navbar />
 				</div>
 			</body>

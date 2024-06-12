@@ -2,6 +2,7 @@
 
 import { Header } from '@/components';
 import { Fragment } from 'react';
+import styles from './quiz-register.module.scss';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -10,7 +11,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 				<Header.BackButton backUrl={-1} />
 				<Header.Title title='퀴즈 등록하기' />
 			</Header>
-			{children}
+			<main className={styles.main}>{children}</main>
 		</Fragment>
 	);
 };
