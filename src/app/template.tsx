@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from './root.module.scss';
 import { onAuthStateChanged } from '@/lib/firebase';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -27,19 +26,13 @@ const RootTemplate = ({ children }: { children: React.ReactNode }) => {
 		});
 	}, [router]);
 
-	if (loading) {
-		return <Spinner />;
-	}
-
 	return (
 		<SWRConfig
 			value={{
 				fallback: <Spinner />,
 			}}
 		>
-			<OverlayProvider>
-				<div className={styles.container}>{children}</div>
-			</OverlayProvider>
+			<OverlayProvider>{loading ? <Spinner /> : children}</OverlayProvider>
 		</SWRConfig>
 	);
 };

@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.scss';
+import styles from './root.module.scss';
+import Navbar from '@/components/navbar';
+
+// NOTE: import {}를 통해서 컴포넌트를 받지 말자
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +20,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='ko'>
-			<body className={inter.className}>{children}</body>
+			<body className={inter.className}>
+				<div className={styles.container}>
+					{children}
+					<Navbar />
+				</div>
+			</body>
 		</html>
 	);
 }

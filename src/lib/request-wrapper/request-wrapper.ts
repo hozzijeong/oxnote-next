@@ -1,4 +1,9 @@
-import { HTTP_METHOD, HTTP_STATUS_CODE, RESPONSE_NOT_FOUND } from './constants';
+import {
+	HTTP_METHOD,
+	HTTP_STATUS_CODE,
+	RESPONSE_MESSAGE,
+	RESPONSE_NOT_FOUND,
+} from './constants';
 import type {
 	NextResponseWithResponseTypeParams,
 	RequestWrapper,
@@ -29,7 +34,32 @@ export const requestWrapper: RequestWrapper =
 		}
 
 		if (methodWhiteList && methodWhiteList.includes(method)) {
-			return handler(req);
+			try {
+				const result = await handler(req);
+
+				return result;
+			} catch (e) {
+				let message = '알 수 없는 에러가 발생했습니다.';
+
+				if (e instanceof Error) {
+					message = e.message;
+				}
+
+				return nextResponseWithResponseType({
+					body: {
+						message: RESPONSE_MESSAGE.FAILURE,
+						code: null,
+						data: null,
+						errors: {
+							code: HTTP_STATUS_CODE.NOT_FOUND,
+							message,
+						},
+					},
+					options: {
+						status: HTTP_STATUS_CODE.NOT_FOUND,
+					},
+				});
+			}
 		}
 
 		return new NextResponse(JSON.stringify(RESPONSE_NOT_FOUND), {

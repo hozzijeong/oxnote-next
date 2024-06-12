@@ -20,6 +20,7 @@ export const signInWithGoogle = async (): Promise<UserCredential> => {
 
 		return result;
 	} catch (error) {
+		console.log(error, ' ERROR');
 		throw new Error('로그인시 문제가 발생했습니다.');
 	}
 };

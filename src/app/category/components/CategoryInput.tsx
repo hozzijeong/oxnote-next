@@ -22,9 +22,10 @@ const CategoryInput = ({ category }: CategoryInputProps) => {
 				onChange={inputChangeHandler}
 			/>
 			<Button
-				size='large'
+				size='medium'
 				className={styles['add-button']}
-				type='submit'
+				color='primary'
+				type='button'
 				onClick={addCategoryHandler}
 			>
 				추가하기

@@ -17,7 +17,7 @@ import {
 	FirestoreDataConverter,
 	updateDoc,
 } from 'firebase/firestore';
-import { app } from '.';
+import { firestore } from '.';
 
 type MutateDocumentPathParams = {
 	path: string;
@@ -28,7 +28,7 @@ type WithMergeOption = MutateDocumentPathParams & {
 	merge?: boolean;
 };
 
-const db = getFirestore(app);
+// TODO: firebase-admin sdk로 유저 관리하기 (root collection 삭제 가능하도록)
 
 // NOTE: 중첩된 문서 경로에 컬렉션을 추가하는 메서드. data 값을 추가한다면, 생성과 동시에 새로운 값을 추가할 수 있다.
 export const createCollection = async <T, D extends DocumentData>({
@@ -43,12 +43,12 @@ export const createCollection = async <T, D extends DocumentData>({
 	converter: FirestoreDataConverter<T, D>;
 }): Promise<DocumentReference<T, D>> => {
 	try {
-		const docRef = doc(db, path);
+		const docRef = doc(firestore, path);
 
 		const docSnap = await getDoc(docRef);
 
 		if (!docSnap.exists()) {
-			throw new Error('존재하지 않는 경로입니다.');
+			throw new Error('존재하지 않는 경로입니다');
 		}
 
 		const newCollectionRef = collection(docRef, key).withConverter(converter);
@@ -67,11 +67,11 @@ export const createCollectionDocument = async ({
 	DocumentReference<DocumentData, DocumentData>
 > => {
 	try {
-		const docRef = await addDoc(collection(db, `${path}`), data);
+		const docRef = await addDoc(collection(firestore, `${path}`), data);
 
 		return docRef;
 	} catch (e) {
-		throw new Error('새 문서를 생성하는 데 실패했습니다.');
+		throw new Error('새 문서를 생성하는 데 실패했습니다');
 	}
 };
 
@@ -82,11 +82,10 @@ export const updateDocumentData = async ({
 	data,
 }: WithMergeOption): Promise<void> => {
 	try {
-		const documentRef = doc(db, path);
-
+		const documentRef = doc(firestore, path);
 		await setDoc(documentRef, data, { merge });
 	} catch (e) {
-		throw new Error('문서를 업데이트하는데 실패했습니다.');
+		throw new Error('문서를 업데이트하는데 실패했습니다');
 	}
 };
 
@@ -95,7 +94,11 @@ export const getDocumentSnapshot = async <T, D extends DocumentData>(
 	path: string,
 	converter: FirestoreDataConverter<T, D>
 ): Promise<DocumentSnapshot<T, DocumentData>> => {
-	return await getDoc(doc(db, `${path}`).withConverter(converter));
+	try {
+		return await getDoc(doc(firestore, `${path}`).withConverter(converter));
+	} catch (e) {
+		throw new Error('문서를 불러오는데 실패했습니다');
+	}
 };
 
 // NOTE: queryConstraints(쿼리 제약)에 해당하는 여러 문서들을 반환하는 메서드
@@ -104,29 +107,42 @@ export const getFilteredQuerySnapShot = async <T, D extends DocumentData>(
 	converter: FirestoreDataConverter<T, D>,
 	filter: QueryFilterConstraint[] = []
 ): Promise<QuerySnapshot<T, D>> => {
-	const docRef = collection(db, `${path}`);
+	try {
+		const docRef = collection(firestore, `${path}`);
 
-	const currentQuery = query(docRef, and(...filter)).withConverter(converter);
+		const currentQuery = query(docRef, and(...filter)).withConverter(converter);
 
-	const querySnapshot = await getDocs(currentQuery);
+		const querySnapshot = await getDocs(currentQuery);
 
-	return querySnapshot;
+		return querySnapshot;
+	} catch (e) {
+		throw new Error('문서를 불러오는데 실패했습니다');
+	}
 };
 
 export const updateDocument = async <T extends { [x: string]: any }>(
 	path: string,
 	data: T
 ) => {
-	const documentRef = doc(db, path);
+	try {
+		const documentRef = doc(firestore, path);
 
-	await updateDoc(documentRef, {
-		...data,
-	});
+		await updateDoc(documentRef, {
+			...data,
+		});
+	} catch (e) {
+		throw new Error('문서를 업데이트하는데 실패했습니다');
+	}
 };
 
 // NOTE: Document를 제거하는 메서드
 export const deleteDocument = async (path: string) => {
-	const document = doc(db, `${path}`);
+	try {
+		const document = doc(firestore, `${path}`);
 
-	await deleteDoc(document);
+		await deleteDoc(document);
+	} catch (e) {
+		console.log(e);
+		throw new Error('문서를 삭제하는데 실패했습니다');
+	}
 };

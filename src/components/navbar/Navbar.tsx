@@ -3,7 +3,6 @@ import styles from './navbar.module.scss';
 import { Folder, Plus, Quiz, Profile } from '@/assets';
 import Image from 'next/image';
 import Link from 'next/link';
-import { memo } from 'react';
 
 const Navbar = () => {
 	return (
@@ -36,4 +35,4 @@ const Navbar = () => {
 	);
 };
 
-export default memo(Navbar);
+export default Navbar;

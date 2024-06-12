@@ -1,5 +1,6 @@
 import { BASE_URL } from '@/constants/path';
 import type { FailureResponse, SuccessResponse } from '.';
+import { CustomError } from '../error';
 
 type ResponseResult<T> = SuccessResponse<T> | FailureResponse;
 
@@ -17,7 +18,7 @@ export const http = {
 		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {
-			throw new Error(`data.errors`);
+			throw new CustomError(data.errors);
 		}
 
 		return data.data;
@@ -37,7 +38,7 @@ export const http = {
 		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {
-			throw new Error(`data.errors`);
+			throw new CustomError(data.errors);
 		}
 
 		return data.data;
@@ -57,7 +58,7 @@ export const http = {
 		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {
-			throw new Error(`data.errors`);
+			throw new CustomError(data.errors);
 		}
 
 		return data.data;
@@ -76,7 +77,7 @@ export const http = {
 		const data = (await response.json()) as ResponseResult<T>;
 
 		if (data.message === 'FAILURE') {
-			throw new Error(`data.errors`);
+			throw new CustomError(data.errors);
 		}
 
 		return data.data;
