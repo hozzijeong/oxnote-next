@@ -4,6 +4,7 @@ import { MouseEventHandler } from 'react';
 import { useLogout } from './hooks/useLogout';
 import { useDeleteAccount } from './hooks';
 import { Button, useConfirm } from '@/components';
+import styles from './my-page.module.scss';
 
 const MyPage = () => {
 	const { logout } = useLogout();
@@ -26,11 +27,21 @@ const MyPage = () => {
 
 	return (
 		<section>
-			<div>
-				<Button onClick={logoutHandler} type='button'>
+			<div className={styles.wrapper}>
+				<Button
+					onClick={logoutHandler}
+					size='medium'
+					color='default'
+					type='button'
+				>
 					로그아웃
 				</Button>
-				<Button onClick={deleteAccountHandler} type='button' disabled>
+				<Button
+					onClick={deleteAccountHandler}
+					size='medium'
+					type='button'
+					disabled
+				>
 					회월 탈퇴
 				</Button>
 			</div>
