@@ -1,7 +1,6 @@
 import {
 	DocumentData,
 	doc,
-	getFirestore,
 	collection,
 	setDoc,
 	getDoc,
@@ -117,21 +116,6 @@ export const getFilteredQuerySnapShot = async <T, D extends DocumentData>(
 		return querySnapshot;
 	} catch (e) {
 		throw new Error('문서를 불러오는데 실패했습니다');
-	}
-};
-
-export const updateDocument = async <T extends { [x: string]: any }>(
-	path: string,
-	data: T
-) => {
-	try {
-		const documentRef = doc(firestore, path);
-
-		await updateDoc(documentRef, {
-			...data,
-		});
-	} catch (e) {
-		throw new Error('문서를 업데이트하는데 실패했습니다');
 	}
 };
 
