@@ -22,8 +22,9 @@ const CategoryInput = ({ category }: CategoryInputProps) => {
 				onChange={inputChangeHandler}
 			/>
 			<Button
-				size='large'
+				size='medium'
 				className={styles['add-button']}
+				color='primary'
 				type='button'
 				onClick={addCategoryHandler}
 			>
