@@ -1,6 +1,8 @@
+import { useToast } from '@/components/toast';
 import { URL_PATH } from '@/constants/path';
 import { useSessionStorage } from '@/hooks';
 import { http } from '@/lib/api';
+import { CustomError } from '@/lib/error';
 import { generatePath } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import useSWRMutation from 'swr/mutation';
@@ -8,8 +10,9 @@ import useSWRMutation from 'swr/mutation';
 const useModifyQuiz = (id: string) => {
 	const router = useRouter();
 	const [quizIds, updateQuizIds] = useSessionStorage<string[]>('quiz-id', []);
+	const addToast = useToast();
 
-	const { trigger } = useSWRMutation<{ quizId: string }>(
+	const { trigger } = useSWRMutation<{ quizId: string }, CustomError>(
 		`/api/quiz/${id}`,
 		http.delete,
 		{
@@ -30,6 +33,9 @@ const useModifyQuiz = (id: string) => {
 						id: quizIds[quizIndex === 0 ? 0 : quizIndex - 1],
 					})
 				);
+			},
+			onError: (error) => {
+				addToast({ message: error.message });
 			},
 		}
 	);

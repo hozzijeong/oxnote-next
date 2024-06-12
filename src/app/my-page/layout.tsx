@@ -1,6 +1,6 @@
 'use client';
 
-import { Header, Navbar } from '@/components';
+import { Header } from '@/components';
 import { Fragment } from 'react';
 import styles from './my-page.module.scss';
 
@@ -11,7 +11,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 				<Header.Title title='마이페이지' />
 			</Header>
 			<main className={styles.main}>{children}</main>
-			<Navbar />
 		</Fragment>
 	);
 };

@@ -3,14 +3,22 @@ import { Category } from '../types';
 import { useCallback } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { Key } from 'swr';
+import { CustomError } from '@/lib/error';
+import { useToast } from '@/components/toast';
 
 export const useCreateCategory = () => {
+	const addToast = useToast();
+
 	const { trigger, isMutating, reset } = useSWRMutation<
 		null,
-		Error,
+		CustomError,
 		Key,
 		Category
-	>('/api/category', http.post);
+	>('/api/category', http.post, {
+		onError: (err) => {
+			addToast({ message: err.message });
+		},
+	});
 
 	const createCategory = useCallback(
 		async (params: Category) => {

@@ -22,6 +22,23 @@ const nextConfig = {
 
 		return [];
 	},
+	async headers() {
+		return [
+			{
+				source: '/(.*)',
+				headers: [
+					{
+						key: 'Cross-Origin-Opener-Policy',
+						value: 'same-origin-allow-popups',
+					},
+					{
+						key: 'Cross-Origin-Resource-Policy',
+						value: 'cross-origin',
+					},
+				],
+			},
+		];
+	},
 };
 
 export default nextConfig;

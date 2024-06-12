@@ -70,7 +70,6 @@ const QuizFilterPage = () => {
 
 		if (categoryIds.length !== 0) {
 			query += `category-id=${categoryIds.join(',')}&`;
-			console.log(categoryIds.join(','));
 		}
 
 		const favorite =

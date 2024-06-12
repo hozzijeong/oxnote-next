@@ -1,3 +1,4 @@
+import { APIError } from '../error';
 import { HTTP_STATUS_CODE } from './constants';
 import { NextResponse, NextRequest as BaseNextRequest } from 'next/server';
 
@@ -17,10 +18,7 @@ export type FailureType = {
 	message: 'FAILURE';
 	code: null;
 	data: null;
-	errors: {
-		code: number;
-		message: string;
-	};
+	errors: APIError;
 };
 
 export type ResponseType<D> = SuccessType<D> | FailureType;

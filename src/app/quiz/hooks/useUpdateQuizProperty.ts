@@ -1,4 +1,6 @@
+import { useToast } from '@/components/toast';
 import { http } from '@/lib/api';
+import { CustomError } from '@/lib/error';
 import { QuizInfo } from '@/types';
 import { useCallback } from 'react';
 import { Key } from 'swr';
@@ -10,12 +12,18 @@ type UpdateAbleQuizProperty =
 	| Omit<QuizInfo, 'record' | 'categoryId' | 'id'>;
 
 export const useUpdateQuizProperty = (id: string) => {
+	const addToast = useToast();
+
 	const { trigger, isMutating, reset } = useSWRMutation<
 		{ result: boolean },
-		Error,
+		CustomError,
 		Key,
 		UpdateAbleQuizProperty
-	>(`/api/quiz/${id}`, http.patch);
+	>(`/api/quiz/${id}`, http.patch, {
+		onError: (error) => {
+			addToast({ message: error.message });
+		},
+	});
 
 	const updateQuiz = useCallback(
 		async (updateProperty: UpdateAbleQuizProperty) => {

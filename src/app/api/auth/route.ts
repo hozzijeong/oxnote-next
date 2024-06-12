@@ -1,4 +1,8 @@
-import { getDocumentSnapshot, updateDocumentData } from '@/lib/firebase';
+import {
+	deleteDocument,
+	getDocumentSnapshot,
+	updateDocumentData,
+} from '@/lib/firebase';
 import {
 	HTTP_METHOD,
 	HTTP_STATUS_CODE,
@@ -7,6 +11,9 @@ import {
 	requestWrapper,
 } from '@/lib/request-wrapper';
 import { userFireStoreConverter } from './converter';
+import type { NextResponse } from 'next/server';
+import type { ResponseType } from '@/lib/request-wrapper/types';
+import { RESPONSE_UNAUTHORIZED } from '@/lib/request-wrapper/constants';
 
 type BodyParams = {
 	uid: string;
@@ -17,32 +24,33 @@ type BodyParams = {
 export const POST = requestWrapper(
 	async (req) => {
 		const { arg } = (await req.json()) as { arg: BodyParams };
-		try {
-			const snapshot = await getDocumentSnapshot(
-				`${arg.uid}/user`,
-				userFireStoreConverter
-			);
 
-			if (!snapshot.exists()) {
-				await updateDocumentData({ path: `${arg.uid}/user`, data: arg });
-				await updateDocumentData({ path: `${arg.uid}/category`, data: {} });
-				await updateDocumentData({ path: `${arg.uid}/quiz`, data: {} });
+		const snapshot = await getDocumentSnapshot(
+			`${arg.uid}/user`,
+			userFireStoreConverter
+		);
 
-				return nextResponseWithResponseType({
-					body: {
-						message: RESPONSE_MESSAGE.SUCCESS,
-						code: HTTP_STATUS_CODE.CREATED,
-						data: null,
-						errors: null,
-					},
+		let successResponse: NextResponse<ResponseType<unknown>>;
 
-					options: {
-						status: HTTP_STATUS_CODE.CREATED,
-					},
-				});
-			}
+		if (!snapshot.exists()) {
+			await updateDocumentData({ path: `${arg.uid}/user`, data: arg });
+			await updateDocumentData({ path: `${arg.uid}/category`, data: {} });
+			await updateDocumentData({ path: `${arg.uid}/quiz`, data: {} });
 
-			const successResponse = nextResponseWithResponseType({
+			successResponse = nextResponseWithResponseType({
+				body: {
+					message: RESPONSE_MESSAGE.SUCCESS,
+					code: HTTP_STATUS_CODE.CREATED,
+					data: null,
+					errors: null,
+				},
+
+				options: {
+					status: HTTP_STATUS_CODE.CREATED,
+				},
+			});
+		} else {
+			successResponse = nextResponseWithResponseType({
 				body: {
 					message: RESPONSE_MESSAGE.SUCCESS,
 					code: HTTP_STATUS_CODE.OK,
@@ -54,31 +62,59 @@ export const POST = requestWrapper(
 					status: HTTP_STATUS_CODE.OK,
 				},
 			});
-
-			successResponse.cookies.set('user-id', arg.uid, {
-				path: '/',
-			});
-
-			return successResponse;
-		} catch (e) {
-			return nextResponseWithResponseType({
-				body: {
-					message: RESPONSE_MESSAGE.FAILURE,
-					code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-					data: null,
-					errors: {
-						code: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-						message: `확인되지 않은 에러가 발생했습니다 : ${JSON.stringify(e)}`,
-					},
-				},
-
-				options: {
-					status: HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
-				},
-			});
 		}
+
+		successResponse.cookies.set('user-id', arg.uid, {
+			path: '/',
+			maxAge: 14 * 24 * 60 * 60,
+			httpOnly: true,
+			secure: process.env.NODE_ENV === 'production',
+			sameSite: 'lax',
+		});
+
+		return successResponse;
 	},
 	{
 		methodWhiteList: [HTTP_METHOD.POST],
+	}
+);
+
+export const DELETE = requestWrapper(
+	async (req) => {
+		const { cookies } = req;
+
+		const userId = cookies.get('user-id');
+
+		if (!userId) {
+			return nextResponseWithResponseType({
+				body: RESPONSE_UNAUTHORIZED,
+				options: {
+					status: HTTP_STATUS_CODE.UNAUTHORIZED,
+				},
+			});
+		}
+
+		await deleteDocument(`${userId.value}`);
+		await deleteDocument(`/user/${userId.value}`);
+
+		const successResponse = nextResponseWithResponseType({
+			body: {
+				message: RESPONSE_MESSAGE.SUCCESS,
+				code: HTTP_STATUS_CODE.OK,
+				data: null,
+				errors: null,
+			},
+
+			options: {
+				status: HTTP_STATUS_CODE.OK,
+			},
+		});
+
+		successResponse.cookies.delete('user-id');
+
+		return successResponse;
+	},
+	{
+		methodWhiteList: [HTTP_METHOD.DELETE],
 	}
 );
