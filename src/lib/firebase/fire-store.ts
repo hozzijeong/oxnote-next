@@ -139,11 +139,15 @@ export const updateDocument = async <T extends { [x: string]: any }>(
 	path: string,
 	data: T
 ) => {
-	const documentRef = doc(db, path);
+	try {
+		const documentRef = doc(firestore, path);
 
-	await updateDoc(documentRef, {
-		...data,
-	});
+		await updateDoc(documentRef, {
+			...data,
+		});
+	} catch (e) {
+		throw new Error('문서를 업데이트하는데 실패했습니다');
+	}
 };
 
 // NOTE: Document를 제거하는 메서드
