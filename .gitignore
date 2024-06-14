@@ -38,6 +38,7 @@ next-env.d.ts
 .vscode
 
 .env
+.env.production
 
 /secure
 .firebase
